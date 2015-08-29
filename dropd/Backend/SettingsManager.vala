@@ -19,6 +19,7 @@
 
 public class dropd.Backend.SettingsManager : Granite.Services.Settings {
     public string server_name { get; set; }
+    public bool server_enabled { get; set; }
 
     public SettingsManager () {
         base ("org.pantheon.drop.dropd");

@@ -18,6 +18,23 @@
  */
 
 public class dropd.Application : Granite.Application {
+    /*
+     * These constants should be kept up-to-date.
+     *
+     * The protocol version should be incremented with any
+     * protocol modification that breaks the backward compatibility.
+     * Clients are using this field to decide, if they are compatible
+     * to the server.
+     */
+    public static const int PROTOCOL_VERSION = 1;
+
+    /*
+     * This field describes the implementation of the drop protocol
+     * for debugging reasons. Don't copy the string 1:1 to a port or
+     * modification of this server.
+     */
+    public static const string PROTOCOL_IMPLEMENTATION = "official vala drop daemon";
+
     private Backend.SettingsManager settings_manager;
     private Backend.ServiceProvider service_provider;
 
@@ -47,7 +64,7 @@ public class dropd.Application : Granite.Application {
         debug ("Starting drop daemon...");
 
         settings_manager = new Backend.SettingsManager ();
-        service_provider = new Backend.ServiceProvider ();
+        service_provider = new Backend.ServiceProvider (settings_manager);
 
         new MainLoop ().run ();
     }

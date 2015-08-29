@@ -6,5 +6,10 @@
             <summary>The server name</summary>
             <description>The name of the server displayed to the clients. Choose nothing to use the hostname.</description>
         </key>
+        <key type="b" name="server-enabled">
+            <default>true</default>
+            <summary>The state of the server</summary>
+            <description>Sets if the server is enabled and accepts transmissions.</description>
+        </key>
     </schema>
 </schemalist>

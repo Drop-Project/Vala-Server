@@ -21,12 +21,26 @@ public class dropd.Backend.ServiceProvider : Object {
     private static const string SERVICE_TYPE = "_drop._tcp";
     private static const uint16 SERVICE_PORT = 7431;
 
+    private static const string SERVICE_FIELD_PROTOCOL_VERSION = "protocol-version";
+    private static const string SERVICE_FIELD_PROTOCOL_IMPLEMENTATION = "protocol-implementation";
+    private static const string SERVICE_FIELD_DISPLAY_NAME = "display-name";
+    private static const string SERVICE_FIELD_SERVER_ENABLED = "server-enabled";
+
+    private SettingsManager settings_manager;
+
     private Avahi.Client client;
     private Avahi.EntryGroup entry_group;
+    private Avahi.EntryGroupService? service = null;
 
-    public ServiceProvider () {
+    private string hostname;
+
+    public ServiceProvider (SettingsManager settings_manager) {
+        this.settings_manager = settings_manager;
+
         client = new Avahi.Client ();
         entry_group = new Avahi.EntryGroup ();
+
+        hostname = Utils.get_hostname ();
 
         connect_signals ();
 
@@ -40,7 +54,7 @@ public class dropd.Backend.ServiceProvider : Object {
     private void connect_signals () {
         client.state_changed.connect ((state) => {
             switch (state) {
-                case Avahi.ClientState.S_RUNNING:
+                case Avahi.ClientState.S_RUNNING :
                     try {
                         entry_group.attach (client);
                     } catch (Error e) {
@@ -55,7 +69,11 @@ public class dropd.Backend.ServiceProvider : Object {
             switch (state) {
                 case Avahi.EntryGroupState.UNCOMMITED:
                     try {
-                        entry_group.add_service (Utils.get_hostname (), SERVICE_TYPE, SERVICE_PORT);
+                        service = entry_group.add_service (hostname, SERVICE_TYPE, SERVICE_PORT);
+                        set_service_field (SERVICE_FIELD_PROTOCOL_VERSION, Application.PROTOCOL_VERSION.to_string ());
+                        set_service_field (SERVICE_FIELD_PROTOCOL_IMPLEMENTATION, Application.PROTOCOL_IMPLEMENTATION);
+                        set_service_field (SERVICE_FIELD_DISPLAY_NAME, settings_manager.server_name.strip () == "" ? hostname : settings_manager.server_name);
+                        set_service_field (SERVICE_FIELD_SERVER_ENABLED, settings_manager.server_enabled.to_string ());
                         entry_group.commit ();
                     } catch (Error e) {
                         warning ("Registering service failed: %s", e.message);
@@ -68,5 +86,25 @@ public class dropd.Backend.ServiceProvider : Object {
                     break;
             }
         });
+
+        settings_manager.notify["server-name"].connect (() => {
+            set_service_field (SERVICE_FIELD_DISPLAY_NAME, settings_manager.server_name.strip () == "" ? hostname : settings_manager.server_name);
+        });
+
+        settings_manager.notify["server-enabled"].connect (() => {
+            set_service_field (SERVICE_FIELD_SERVER_ENABLED, settings_manager.server_enabled.to_string ());
+        });
+    }
+
+    private void set_service_field (string field, string value) {
+        if (service == null) {
+            return;
+        }
+
+        try {
+            service.set (field, value);
+        } catch (Error e) {
+            warning ("Writing to service configuration failed: %s", e.message);
+        }
     }
 }
