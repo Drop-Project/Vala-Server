@@ -5,13 +5,19 @@ include (ValaPrecompile)
 vala_precompile (VALA_C
     config.vala
     Application.vala
+    Backend/SettingsManager.vala
+    Backend/ServiceProvider.vala
+    Backend/Utils.vala
 PACKAGES
     granite
     gtk+-3.0
     gio-2.0
     gee-0.8
+    avahi-gobject
+    posix
 OPTIONS
     --thread
+    --vapidir=${CMAKE_SOURCE_DIR}/vapi
 )
 
 # Add executable

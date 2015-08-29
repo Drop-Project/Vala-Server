@@ -6,7 +6,7 @@ cmake_minimum_required (VERSION 2.8)
 cmake_policy (VERSION 2.6)
 
 # Configuration
-set (DATADIR "${CMAKE_INSTALL_PREFIX}/share/drop")
+set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")
 set (PKGDATADIR "${DATADIR}/drop")
 set (GETTEXT_PACKAGE "drop")
 set (RELEASE_NAME "drop")
@@ -35,7 +35,7 @@ add_definitions (-DGETTEXT_PACKAGE="drop")
 
 # Check for required dependencies
 find_package (PkgConfig)
-pkg_check_modules (DEPS REQUIRED granite gtk+-3.0 gthread-2.0 gio-2.0 gee-0.8)
+pkg_check_modules (DEPS REQUIRED granite gtk+-3.0 gthread-2.0 gio-2.0 gee-0.8 avahi-gobject)
 
 # Link dependencies
 add_definitions (${DEPS_CFLAGS})

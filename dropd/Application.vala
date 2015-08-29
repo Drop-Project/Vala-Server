@@ -18,6 +18,9 @@
  */
 
 public class dropd.Application : Granite.Application {
+    private Backend.SettingsManager settings_manager;
+    private Backend.ServiceProvider service_provider;
+
     construct {
         /* App-Properties */
         program_name = "Drop-Daemon";
@@ -41,9 +44,10 @@ public class dropd.Application : Granite.Application {
     public override void startup () {
         base.startup ();
 
-        debug ("Starting Drop-Daemon");
+        debug ("Starting drop daemon...");
 
-        /* Start the daemon */
+        settings_manager = new Backend.SettingsManager ();
+        service_provider = new Backend.ServiceProvider ();
 
         new MainLoop ().run ();
     }

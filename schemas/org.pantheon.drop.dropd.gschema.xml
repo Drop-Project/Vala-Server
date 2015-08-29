@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-    <schema path="/org/pantheon/drop/" id="org.pantheon.drop" gettext-domain="drop">
+    <schema path="/org/pantheon/drop/dropd/" id="org.pantheon.drop.dropd" gettext-domain="drop">
         <key type="s" name="server-name">
             <default>""</default>
             <summary>The server name</summary>
