@@ -35,8 +35,15 @@ public class dropd.Application : Granite.Application {
      */
     public static const string PROTOCOL_IMPLEMENTATION = "official vala drop daemon";
 
+    /*
+     * This value shouldn't be modified across all implemenations
+     * to serve optimal compatibility.
+     */
+    public static const uint16 PORT = 7431;
+
     private Backend.SettingsManager settings_manager;
     private Backend.ServiceProvider service_provider;
+    private Backend.Server server;
 
     construct {
         /* App-Properties */
@@ -65,6 +72,9 @@ public class dropd.Application : Granite.Application {
 
         settings_manager = new Backend.SettingsManager ();
         service_provider = new Backend.ServiceProvider (settings_manager);
+        server = new Backend.Server ();
+
+        server.start ();
 
         new MainLoop ().run ();
     }

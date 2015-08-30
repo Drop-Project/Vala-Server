@@ -7,6 +7,8 @@ vala_precompile (VALA_C
     Application.vala
     Backend/SettingsManager.vala
     Backend/ServiceProvider.vala
+    Backend/Server.vala
+    Backend/IncomingTransmission.vala
     Backend/Utils.vala
 PACKAGES
     granite

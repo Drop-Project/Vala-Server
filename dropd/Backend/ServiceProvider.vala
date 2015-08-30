@@ -19,7 +19,6 @@
 
 public class dropd.Backend.ServiceProvider : Object {
     private static const string SERVICE_TYPE = "_drop._tcp";
-    private static const uint16 SERVICE_PORT = 7431;
 
     private static const string SERVICE_FIELD_PROTOCOL_VERSION = "protocol-version";
     private static const string SERVICE_FIELD_PROTOCOL_IMPLEMENTATION = "protocol-implementation";
@@ -47,7 +46,7 @@ public class dropd.Backend.ServiceProvider : Object {
         try {
             client.start ();
         } catch (Error e) {
-            warning ("Connecting to Avahi failed: %s", e.message);
+            critical ("Connecting to Avahi failed: %s", e.message);
         }
     }
 
@@ -58,7 +57,7 @@ public class dropd.Backend.ServiceProvider : Object {
                     try {
                         entry_group.attach (client);
                     } catch (Error e) {
-                        warning ("Cannot attach client to entry group: %s", e.message);
+                        critical ("Cannot attach client to entry group: %s", e.message);
                     }
 
                     break;
@@ -69,14 +68,14 @@ public class dropd.Backend.ServiceProvider : Object {
             switch (state) {
                 case Avahi.EntryGroupState.UNCOMMITED:
                     try {
-                        service = entry_group.add_service (hostname, SERVICE_TYPE, SERVICE_PORT);
+                        service = entry_group.add_service (hostname, SERVICE_TYPE, Application.PORT);
                         set_service_field (SERVICE_FIELD_PROTOCOL_VERSION, Application.PROTOCOL_VERSION.to_string ());
                         set_service_field (SERVICE_FIELD_PROTOCOL_IMPLEMENTATION, Application.PROTOCOL_IMPLEMENTATION);
                         set_service_field (SERVICE_FIELD_DISPLAY_NAME, settings_manager.server_name.strip () == "" ? hostname : settings_manager.server_name);
                         set_service_field (SERVICE_FIELD_SERVER_ENABLED, settings_manager.server_enabled.to_string ());
                         entry_group.commit ();
                     } catch (Error e) {
-                        warning ("Registering service failed: %s", e.message);
+                        critical ("Registering service failed: %s", e.message);
                     }
 
                     break;
