@@ -1,0 +1,255 @@
+# Dutch translation for drop
+# Copyright (c) 2015 Rosetta Contributors and Canonical Ltd 2015
+# This file is distributed under the same license as the drop package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: drop\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2015-03-01 17:55+0100\n"
+"PO-Revision-Date: 2015-03-01 19:01+0000\n"
+"Last-Translator: kay van der Zander <Unknown>\n"
+"Language-Team: Dutch <nl@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2015-08-30 05:37+0000\n"
+"X-Generator: Launchpad (build 17690)\n"
+
+#: /home/marcus/Projekte/drop/po/../client/DetailsPage.vala:51
+msgid "Receiver:"
+msgstr "Ontvanger:"
+
+#: /home/marcus/Projekte/drop/po/../client/DetailsPage.vala:70
+#: /home/marcus/Projekte/drop/po/../server/TransmissionDialog.vala:80
+msgid "Number of files:"
+msgstr "Aantal bestanden:"
+
+#: /home/marcus/Projekte/drop/po/../client/DetailsPage.vala:84
+#: /home/marcus/Projekte/drop/po/../server/TransmissionDialog.vala:94
+msgid "Overall size:"
+msgstr "totale bestandsgrootte"
+
+#: /home/marcus/Projekte/drop/po/../client/DetailsPage.vala:105
+msgid "Connect to server"
+msgstr "Verbinden met server"
+
+#: /home/marcus/Projekte/drop/po/../client/DetailsPage.vala:118
+#: /home/marcus/Projekte/drop/po/../client/TransmissionPage.vala:57
+#: /home/marcus/Projekte/drop/po/../client/ConnectingPage.vala:65
+#: /home/marcus/Projekte/drop/po/../client/RequestPage.vala:68
+#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:138
+msgid "Cancel"
+msgstr "Annuleren"
+
+#: /home/marcus/Projekte/drop/po/../client/main.vala:75
+msgid "One or more files aren't existent."
+msgstr "een of meerdere bestanden bestaan niet"
+
+#: /home/marcus/Projekte/drop/po/../client/main.vala:89
+msgid "Threads are not supported."
+msgstr "Threads zijn niet ondersteund"
+
+#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:74
+#, c-format
+msgid "<b>Transmission of %s %s</b>"
+msgstr "<b> Verzenden van %s %s</b>"
+
+#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:74
+msgid "file"
+msgstr "Bestand"
+
+#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:74
+msgid "files"
+msgstr "Bestanden"
+
+#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:196
+msgid "Connecting to server failed. (Timed out.)"
+msgstr ""
+"verbinden met de server is mislukt. (tijd om te verbinden is verlopen)"
+
+#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:227
+msgid "Requesting the transmission..."
+msgstr "verzoek om versturen"
+
+#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:241
+#, c-format
+msgid "The hostname \"%s\" has not been accepted by the server."
+msgstr "de host naam \"%s\" is niet geaccepteerd door de server"
+
+#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:259
+#, c-format
+msgid "Calculating checksum for \"%s\"..."
+msgstr "valideer de bestanden \"%s\"..."
+
+#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:266
+msgid "Please accept the transmission-request on the other computer."
+msgstr ""
+"accepteer het bestandsoverdracht verzoek op de andere computer alsjeblieft"
+
+#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:274
+msgid "Starting the transmission..."
+msgstr "het verzenden is aan eht starten"
+
+#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:328
+msgid "hour(s)"
+msgstr "uur(en)"
+
+#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:328
+msgid "and"
+msgstr "en"
+
+#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:328
+#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:331
+msgid "minute(s)"
+msgstr "minuten"
+
+#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:336
+#, c-format
+msgid "File %d of %d"
+msgstr "Bestand %d van %d"
+
+#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:337
+#, c-format
+msgid "%0.2f %% sent. %s remaining (%s)."
+msgstr "%0.2f %% verzonden. %s overgebleven (%s)"
+
+#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:364
+#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:343
+msgid "Transmission completed."
+msgstr "Overdracht klaar"
+
+#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:364
+#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:343
+#, c-format
+msgid "%d file(s) had been transmitted."
+msgstr "%d bestand(en) zijn verzonden"
+
+#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:376
+msgid "The transmission was rejected by the other computer."
+msgstr "De overdracht was afgekeurd op de andere computer"
+
+#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:383
+msgid "Protocol version not supported! Please try to update the client."
+msgstr "Protocol versie niet ondersteund! update de software alsjeblieft"
+
+#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:390
+msgid "Connecting to server failed."
+msgstr "verbinden met de server is mislukt"
+
+#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:426
+#, c-format
+msgid "Failed to open file \"%s\": %s"
+msgstr "niet gelukt om bestand te openen \"%s\":%s"
+
+#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:458
+#: /home/marcus/Projekte/drop/po/../server/File.vala:49
+#, c-format
+msgid "Failed to create the checksum for \"%s\"."
+msgstr "Mislukt om te valideren van \"%s\""
+
+#: /home/marcus/Projekte/drop/po/../client/ConnectingPage.vala:82
+#, c-format
+msgid "Trying to connect to \"%s\"..."
+msgstr "probeer te verbinden met \"%s\""
+
+#: /home/marcus/Projekte/drop/po/../client/FailurePage.vala:69
+msgid "Try again"
+msgstr "Opnieuw proberen"
+
+#: /home/marcus/Projekte/drop/po/../client/FailurePage.vala:81
+msgid "Give up"
+msgstr "Opgeven"
+
+#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:108
+#, c-format
+msgid "Request by %s."
+msgstr "verzoek van %s"
+
+#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:123
+#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:163
+#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:331
+#, c-format
+msgid "Communication error: %s"
+msgstr "communicatie fout: %s"
+
+#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:137
+msgid "Select the folder for the received files"
+msgstr "selecteer de map voor de ontvangen bestanden"
+
+#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:139
+msgid "Start Transmission"
+msgstr "start verzenden"
+
+#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:184
+msgid "Protocol error: Too many transmission-requests."
+msgstr "Protocol fout: Te veel verzend verzoeken"
+
+#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:191
+msgid "Protocol error: Unknown hostname."
+msgstr "Protocol fout: Niet bekent host naam"
+
+#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:221
+#, c-format
+msgid "Receiving file %d of %d by %s (%0.2f %%)."
+msgstr "Bestand %d van  %d ontvangen, Van  %s (%0.2f %%)."
+
+#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:232
+#, c-format
+msgid "IO error: Failed to write to \"%s\"."
+msgstr "I/O fout: Mislukt om te schrijven naar \"%s\""
+
+#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:242
+#, c-format
+msgid "Failed to write to \"%s\"."
+msgstr "Mislukt om te schrijven naar \"%s\""
+
+#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:268
+#, c-format
+msgid "IO error: Failed to move the file to \"%s\": %s"
+msgstr "I/O fout: Mislukt om bestand te verplaatsen naar \"%s\": %s"
+
+#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:281
+#, c-format
+msgid "Failed to move the temporary file to \"%s\": %s"
+msgstr "Mislukt om tijdelijke bestanden te verplaatsen naar \"%s\": %s"
+
+#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:302
+#, c-format
+msgid "Transmission error: Bad checksum of file \"%s\"."
+msgstr "Overdracht fout: slechte checksum van bestand \"%s\""
+
+#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:309
+msgid "Protocol error: Transmission not requested."
+msgstr "Protocol fout: Overdracht is niet aangevraagd"
+
+#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:346
+msgid "Transmission canceled."
+msgstr "Overdracht geannuleerd"
+
+#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:346
+msgid "Connection to the client closed."
+msgstr "Verbinding naar de gebruiker gesloten"
+
+#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:350
+#, c-format
+msgid "Notification error: %s"
+msgstr "Notificatie fout: %s"
+
+#: /home/marcus/Projekte/drop/po/../server/TransmissionDialog.vala:67
+#, c-format
+msgid "Transmission by %s"
+msgstr "overdracht van %s"
+
+#: /home/marcus/Projekte/drop/po/../server/TransmissionDialog.vala:119
+msgid "Accept"
+msgstr "Accepteren"
+
+#: /home/marcus/Projekte/drop/po/../server/TransmissionDialog.vala:131
+msgid "Reject"
+msgstr "Afwijzen"
+
+#: /home/marcus/Projekte/drop/po/../server/Server.vala:119
+msgid "Accept connections"
+msgstr "Accepteer verbinding"
