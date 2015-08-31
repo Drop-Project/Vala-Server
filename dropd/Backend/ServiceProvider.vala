@@ -33,21 +33,15 @@ public class dropd.Backend.ServiceProvider : Object {
 
     private string hostname;
 
-    public ServiceProvider (SettingsManager settings_manager) {
+    public ServiceProvider (Avahi.Client client, SettingsManager settings_manager) {
+        this.client = client;
         this.settings_manager = settings_manager;
 
-        client = new Avahi.Client ();
         entry_group = new Avahi.EntryGroup ();
 
         hostname = Utils.get_hostname ();
 
         connect_signals ();
-
-        try {
-            client.start ();
-        } catch (Error e) {
-            critical ("Connecting to Avahi failed: %s", e.message);
-        }
     }
 
     private void connect_signals () {

@@ -17,10 +17,26 @@
  * Boston, MA 02111-1307, USA.
  */
 
-[DBus (name = "org.dropd.IncomingTransmission")]
-public class dropd.Backend.IncomingTransmission : Object {
-    /* diese klasse ist ein dbus-interface. passiv agieren. nur senden wenn über dbus gefordert. eingehend=signal */
-    public IncomingTransmission (TlsServerConnection connection) {
-        //connection.output_stream.write ("Test".data);
+[DBus (name = "org.dropd")]
+public class dropd.Backend.DBusInterface : Object {
+    public signal void new_transmission_request (string interface_path);
+    public signal void transmission_partners_changed ();
+
+    private Server server;
+    private ServiceBrowser service_browser;
+
+    public DBusInterface (Server server, ServiceBrowser service_browser) {
+        this.server = server;
+        this.service_browser = service_browser;
+
+        connect_signals ();
+    }
+
+    private void connect_signals () {
+        server.new_transmission_interface_registered.connect ((interface_path) => new_transmission_request (interface_path));
+    }
+
+    public ServiceBrowser.TransmissionPartner[] get_transmission_partners () {
+        return service_browser.get_transmission_partners ();
     }
 }

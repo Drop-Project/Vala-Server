@@ -35,7 +35,10 @@ add_definitions (-DGETTEXT_PACKAGE="drop")
 
 # Check for required dependencies
 find_package (PkgConfig)
-pkg_check_modules (DEPS REQUIRED granite gtk+-3.0 gthread-2.0 gio-2.0 gee-0.8 avahi-gobject)
+pkg_check_modules (DEPS REQUIRED granite gtk+-3.0 gthread-2.0 gio-2.0 gee-0.8 avahi-gobject avahi-client)
+
+# Link the avahi library
+add_definitions (-lavahi)
 
 # Link dependencies
 add_definitions (${DEPS_CFLAGS})

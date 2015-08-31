@@ -41,9 +41,13 @@ public class dropd.Application : Granite.Application {
      */
     public static const uint16 PORT = 7431;
 
+    private Avahi.Client client;
+
     private Backend.SettingsManager settings_manager;
     private Backend.ServiceProvider service_provider;
+    private Backend.ServiceBrowser service_browser;
     private Backend.Server server;
+    private Backend.DBusInterface dbus_interface;
 
     construct {
         /* App-Properties */
@@ -70,13 +74,52 @@ public class dropd.Application : Granite.Application {
 
         debug ("Starting drop daemon...");
 
-        settings_manager = new Backend.SettingsManager ();
-        service_provider = new Backend.ServiceProvider (settings_manager);
-        server = new Backend.Server ();
+        client = new Avahi.Client ();
 
-        server.start ();
+        settings_manager = new Backend.SettingsManager ();
+        service_provider = new Backend.ServiceProvider (client, settings_manager);
+        service_browser = new Backend.ServiceBrowser (client);
+        server = new Backend.Server ();
+        dbus_interface = new Backend.DBusInterface (server, service_browser);
+
+        try {
+            client.start ();
+        } catch (Error e) {
+            critical ("Connecting to Avahi failed: %s", e.message);
+        }
+
+        initialize_dbus ();
+
+        if (settings_manager.server_enabled) {
+            server.start ();
+        }
+
+        connect_signals ();
 
         new MainLoop ().run ();
+    }
+
+    private void initialize_dbus () {
+        Bus.own_name (BusType.SESSION, "org.dropd", BusNameOwnerFlags.NONE, (dbus_connection) => {
+            try {
+                dbus_connection.register_object ("/org/dropd", dbus_interface);
+                debug ("DBus interface /org/dropd registered.");
+            } catch (Error e) {
+                warning ("Registering DBus interface /org/dropd failed: %s", e.message);
+            }
+        }, null, () => {
+            warning ("Could not aquire DBus name.");
+        });
+    }
+
+    private void connect_signals () {
+        settings_manager.notify["server-enabled"].connect (() => {
+            if (settings_manager.server_enabled) {
+                server.start ();
+            } else {
+                server.stop ();
+            }
+        });
     }
 
     public static void main (string[] args) {

@@ -18,6 +18,8 @@
  */
 
 public class dropd.Backend.Server : ThreadedSocketService {
+    public signal void new_transmission_interface_registered (string interface_path);
+
     private int transmission_counter = 0;
 
     public Server () {
@@ -50,6 +52,8 @@ public class dropd.Backend.Server : ThreadedSocketService {
                 Bus.own_name (BusType.SESSION, "org.dropd.IncomingTransmission", BusNameOwnerFlags.NONE, (dbus_connection) => {
                     try {
                         dbus_connection.register_object (interface_path, new IncomingTransmission (tls_connection));
+                        new_transmission_interface_registered (interface_path);
+
                         debug ("DBus interface %s registered.", interface_path);
                     } catch (Error e) {
                         warning ("Registering DBus interface %s failed: %s", interface_path, e.message);
