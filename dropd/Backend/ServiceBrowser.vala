@@ -45,13 +45,14 @@ public class dropd.Backend.ServiceBrowser : Object {
 
     private Gee.HashMap<string, TransmissionPartnerEntry> transmission_partners;
 
-    private Avahi.Client client;
+    public Avahi.Client client { private get; construct; }
+
     private Avahi.ServiceBrowser browser;
 
     private string hostname;
 
     public ServiceBrowser (Avahi.Client client) {
-        this.client = client;
+        Object (client: client);
 
         transmission_partners = new Gee.HashMap<string, TransmissionPartnerEntry> ();
 
@@ -124,7 +125,7 @@ public class dropd.Backend.ServiceBrowser : Object {
                 critical ("Cannot attach client to resolver: %s", e.message);
             }
 
-            // FIXME: We need to make sure that the object is unreferenced later. Calling unref () triggers errors.
+            /* FIXME: We need to make sure that the object is unreferenced later. Calling unref () triggers errors. */
             resolver.ref ();
         });
 

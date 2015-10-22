@@ -47,6 +47,12 @@ public class dropd.Backend.Server : ThreadedSocketService {
                     return false;
                 }
 
+                if (!tls_connection.handshake ()) {
+                    warning ("TLS-Handshake failed.");
+
+                    return false;
+                }
+
                 string interface_path = "/org/dropd/IncomingTransmission%i".printf (transmission_counter++);
 
                 Bus.own_name (BusType.SESSION, "org.dropd.IncomingTransmission", BusNameOwnerFlags.NONE, (dbus_connection) => {

@@ -21,6 +21,6 @@
 public class dropd.Backend.IncomingTransmission : Object {
     /* diese klasse ist ein dbus-interface. passiv agieren. nur senden wenn über dbus gefordert. eingehend=signal */
     public IncomingTransmission (TlsServerConnection connection) {
-        //connection.output_stream.write ("Test".data);
+        connection.output_stream.write ("Test".data);
     }
 }

@@ -25,17 +25,16 @@ public class dropd.Backend.ServiceProvider : Object {
     private static const string SERVICE_FIELD_DISPLAY_NAME = "display-name";
     private static const string SERVICE_FIELD_SERVER_ENABLED = "server-enabled";
 
-    private SettingsManager settings_manager;
+    public Avahi.Client client { private get; construct; }
+    public SettingsManager settings_manager { private get; construct; }
 
-    private Avahi.Client client;
     private Avahi.EntryGroup entry_group;
     private Avahi.EntryGroupService? service = null;
 
     private string hostname;
 
     public ServiceProvider (Avahi.Client client, SettingsManager settings_manager) {
-        this.client = client;
-        this.settings_manager = settings_manager;
+        Object (client : client, settings_manager: settings_manager);
 
         entry_group = new Avahi.EntryGroup ();
 
@@ -47,7 +46,7 @@ public class dropd.Backend.ServiceProvider : Object {
     private void connect_signals () {
         client.state_changed.connect ((state) => {
             switch (state) {
-                case Avahi.ClientState.S_RUNNING :
+                case Avahi.ClientState.S_RUNNING:
                     try {
                         entry_group.attach (client);
                     } catch (Error e) {
