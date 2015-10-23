@@ -31,14 +31,10 @@ public class dropd.Backend.ServiceProvider : Object {
     private Avahi.EntryGroup entry_group;
     private Avahi.EntryGroupService? service = null;
 
-    private string hostname;
-
     public ServiceProvider (Avahi.Client client, SettingsManager settings_manager) {
         Object (client : client, settings_manager: settings_manager);
 
         entry_group = new Avahi.EntryGroup ();
-
-        hostname = Utils.get_hostname ();
 
         connect_signals ();
     }
@@ -61,10 +57,10 @@ public class dropd.Backend.ServiceProvider : Object {
             switch (state) {
                 case Avahi.EntryGroupState.UNCOMMITED:
                     try {
-                        service = entry_group.add_service (hostname, SERVICE_TYPE, Application.PORT);
+                        service = entry_group.add_service (Environment.get_host_name (), SERVICE_TYPE, Application.PORT);
                         set_service_field (SERVICE_FIELD_PROTOCOL_VERSION, Application.PROTOCOL_VERSION.to_string ());
                         set_service_field (SERVICE_FIELD_PROTOCOL_IMPLEMENTATION, Application.PROTOCOL_IMPLEMENTATION);
-                        set_service_field (SERVICE_FIELD_DISPLAY_NAME, settings_manager.server_name.strip () == "" ? hostname : settings_manager.server_name);
+                        set_service_field (SERVICE_FIELD_DISPLAY_NAME, settings_manager.server_name.strip () == "" ? Environment.get_host_name () : settings_manager.server_name);
                         set_service_field (SERVICE_FIELD_SERVER_ENABLED, settings_manager.server_enabled.to_string ());
                         entry_group.commit ();
                     } catch (Error e) {
@@ -80,7 +76,7 @@ public class dropd.Backend.ServiceProvider : Object {
         });
 
         settings_manager.notify["server-name"].connect (() => {
-            set_service_field (SERVICE_FIELD_DISPLAY_NAME, settings_manager.server_name.strip () == "" ? hostname : settings_manager.server_name);
+            set_service_field (SERVICE_FIELD_DISPLAY_NAME, settings_manager.server_name.strip () == "" ? Environment.get_host_name () : settings_manager.server_name);
         });
 
         settings_manager.notify["server-enabled"].connect (() => {

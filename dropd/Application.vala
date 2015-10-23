@@ -125,7 +125,7 @@ public class dropd.Application : Granite.Application {
     public static void main (string[] args) {
         Gtk.init (ref args);
 
-        var application = new Application ();
+        Application application = new Application ();
         application.run (args);
     }
 }

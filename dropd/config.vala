@@ -1,4 +1,4 @@
-namespace config {
+namespace dropd.config {
     public const string DATADIR = "/usr/share";
     public const string PKGDATADIR = "/usr/share/drop";
     public const string GETTEXT_PACKAGE = "drop";

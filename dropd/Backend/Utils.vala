@@ -18,10 +18,4 @@
  */
 
 public class dropd.Backend.Utils : Object {
-    public static string get_hostname () {
-        char[] hostname = new char[1024];
-        Posix.gethostname (hostname);
-
-        return (string)hostname;
-    }
 }

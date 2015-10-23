@@ -27,15 +27,6 @@ public class dropd.Backend.ServiceBrowser : Object {
         bool server_enabled;
     }
 
-    /* FIXME: This is a workaround to enable the use of the struct as generic type. */
-    private class TransmissionPartnerEntry : Object {
-        public TransmissionPartner transmission_partner { get; construct set; }
-
-        public TransmissionPartnerEntry (TransmissionPartner transmission_partner) {
-            Object (transmission_partner: transmission_partner);
-        }
-    }
-
     private static const string SERVICE_TYPE = "_drop._tcp";
 
     private static const string SERVICE_FIELD_PROTOCOL_VERSION = "protocol-version";
@@ -43,31 +34,31 @@ public class dropd.Backend.ServiceBrowser : Object {
     private static const string SERVICE_FIELD_DISPLAY_NAME = "display-name";
     private static const string SERVICE_FIELD_SERVER_ENABLED = "server-enabled";
 
-    private Gee.HashMap<string, TransmissionPartnerEntry> transmission_partners;
+    private Gee.HashMap<string, TransmissionPartner? > transmission_partners;
 
     public Avahi.Client client { private get; construct; }
 
     private Avahi.ServiceBrowser browser;
 
-    private string hostname;
-
     public ServiceBrowser (Avahi.Client client) {
-        Object (client: client);
+        Object (client : client);
 
-        transmission_partners = new Gee.HashMap<string, TransmissionPartnerEntry> ();
+        transmission_partners = new Gee.HashMap<string, TransmissionPartner? > ();
 
         browser = new Avahi.ServiceBrowser (SERVICE_TYPE);
-
-        hostname = Utils.get_hostname ();
 
         connect_signals ();
     }
 
-    public TransmissionPartner[] get_transmission_partners () {
+    public TransmissionPartner[] get_transmission_partners (bool show_myself = true) {
         TransmissionPartner[] partners = {};
 
         transmission_partners.@foreach ((entry) => {
-            partners += entry.value.transmission_partner;
+            if (!show_myself && entry.value.hostname == Environment.get_host_name ()) {
+                return true;
+            }
+
+            partners += entry.value;
 
             return true;
         });
@@ -78,7 +69,7 @@ public class dropd.Backend.ServiceBrowser : Object {
     private void connect_signals () {
         client.state_changed.connect ((state) => {
             switch (state) {
-                case Avahi.ClientState.S_RUNNING:
+                case Avahi.ClientState.S_RUNNING :
                     try {
                         browser.attach (client);
                     } catch (Error e) {
@@ -90,7 +81,7 @@ public class dropd.Backend.ServiceBrowser : Object {
         });
 
         browser.new_service.connect ((@interface, protocol, name, type, domain, flags) => {
-            if (name == hostname || transmission_partners.has_key (name)) {
+            if (transmission_partners.has_key (name)) {
                 return;
             }
 
@@ -109,14 +100,14 @@ public class dropd.Backend.ServiceBrowser : Object {
                     return;
                 }
 
-                transmission_partners.set (name, new TransmissionPartnerEntry ({
+                transmission_partners.@set (name, {
                     hostname,
                     port,
                     int.parse (get_txt_field_value (txt, SERVICE_FIELD_PROTOCOL_VERSION)),
                     get_txt_field_value (txt, SERVICE_FIELD_PROTOCOL_IMPLEMENTATION),
                     get_txt_field_value (txt, SERVICE_FIELD_DISPLAY_NAME),
                     get_txt_field_value (txt, SERVICE_FIELD_SERVER_ENABLED) == "true"
-                }));
+                });
             });
 
             try {

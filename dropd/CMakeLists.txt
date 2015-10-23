@@ -10,11 +10,12 @@ vala_precompile (VALA_C
     Backend/ServiceProvider.vala
     Backend/ServiceBrowser.vala
     Backend/Server.vala
+    Backend/ProtocolImplementation.vala
     Backend/IncomingTransmission.vala
+    Backend/OutgoingTransmission.vala
     Backend/Utils.vala
 PACKAGES
     granite
-    gtk+-3.0
     gio-2.0
     gee-0.8
     avahi-gobject
@@ -23,6 +24,7 @@ PACKAGES
 OPTIONS
     --thread
     --vapidir=${CMAKE_SOURCE_DIR}/vapi
+    --target-glib 2.32
 )
 
 # Add executable

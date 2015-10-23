@@ -18,9 +18,82 @@
  */
 
 [DBus (name = "org.dropd.IncomingTransmission")]
-public class dropd.Backend.IncomingTransmission : Object {
-    /* diese klasse ist ein dbus-interface. passiv agieren. nur senden wenn über dbus gefordert. eingehend=signal */
+public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
+    public enum ServerState {
+        AWAITING_REQUEST,
+        NEEDS_CONFIRMATION,
+        RECEIVING_DATA,
+        FINISHED,
+        FAILURE,
+        CANCELED,
+        REJECTED
+    }
+
+    public struct FileRequest {
+        uint16 id;
+        uint32 size;
+        string name;
+    }
+
+    public signal void protocol_failed (string error_message);
+    public signal void state_changed (ServerState state);
+
+    public ServerState state { get; private set; default = ServerState.AWAITING_REQUEST; }
+
+    private Gee.HashMap<int, FileRequest? > file_requests;
+
     public IncomingTransmission (TlsServerConnection connection) {
-        connection.output_stream.write ("Test".data);
+        base (connection.input_stream, connection.output_stream);
+
+        new Thread<int> (null, () => {
+            if (!receive_request ()) {
+                protocol_failed (_("Receiving request failed."));
+
+                return 0;
+            }
+
+            return 0;
+        });
+    }
+
+    public FileRequest[] get_file_requests () {
+        FileRequest[] requests = {};
+
+        file_requests.@foreach ((entry) => {
+            requests += entry.value;
+
+            return true;
+        });
+
+        return requests;
+    }
+
+    private bool receive_request () {
+        file_requests = new Gee.HashMap<int, FileRequest? > ();
+        bool last_file = false;
+
+        while (!last_file) {
+            uint8[]? package = receive_package (CLIENT_COMMAND_FILE_REQUEST);
+
+            if (package == null) {
+                return false;
+            }
+
+            last_file = (package[1] == 1);
+
+            uint16 id = (package[2] << 8) + package[3];
+            uint32 size = (package[4] << 24) + (package[5] << 16) + (package[6] << 8) + package[7];
+            package.move (8, 0, package.length - 8);
+            string name = (string)package;
+
+            file_requests.@set (id, { id, size, name });
+        }
+
+        return true;
+    }
+
+    private void update_state (ServerState state) {
+        this.state = state;
+        state_changed (state);
     }
 }
