@@ -72,6 +72,12 @@ public class dropd.Application : Granite.Application {
     public override void startup () {
         base.startup ();
 
+        if (!Thread.supported ()) {
+            critical ("Threading is not supported by this system.");
+
+            return;
+        }
+
         debug ("Starting drop daemon...");
 
         client = new Avahi.Client ();

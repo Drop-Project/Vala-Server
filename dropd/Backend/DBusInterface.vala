@@ -39,8 +39,9 @@ public class dropd.Backend.DBusInterface : Object {
         return service_browser.get_transmission_partners (show_myself);
     }
 
-    public string start_outgoing_transmission (string hostname, string[] files) {
+    public string start_outgoing_transmission (string hostname, string[] filenames) {
         string interface_path = "/org/dropd/OutgoingTransmission%u".printf (transmission_counter++);
+        string[] files = filenames;
 
         new Thread<int> (null, () => {
             debug ("Resolving \"%s\"...", hostname);
@@ -67,7 +68,7 @@ public class dropd.Backend.DBusInterface : Object {
                 } else {
                     debug ("Connection established.");
 
-                    OutgoingTransmission protocol_implementation = new OutgoingTransmission (connection);
+                    OutgoingTransmission protocol_implementation = new OutgoingTransmission (connection, files);
 
                     uint interface_id = Bus.own_name (BusType.SESSION, "org.dropd.OutgoingTransmission", BusNameOwnerFlags.NONE, (dbus_connection) => {
                         try {

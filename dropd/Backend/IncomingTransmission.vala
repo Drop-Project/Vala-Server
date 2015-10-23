@@ -38,7 +38,7 @@ public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
     public signal void protocol_failed (string error_message);
     public signal void state_changed (ServerState state);
 
-    public ServerState state { get; private set; default = ServerState.AWAITING_REQUEST; }
+    private ServerState state = ServerState.AWAITING_REQUEST;
 
     private Gee.HashMap<int, FileRequest? > file_requests;
 
@@ -54,6 +54,10 @@ public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
 
             return 0;
         });
+    }
+
+    public ServerState get_state () {
+        return state;
     }
 
     public FileRequest[] get_file_requests () {
@@ -83,8 +87,10 @@ public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
 
             uint16 id = (package[2] << 8) + package[3];
             uint32 size = (package[4] << 24) + (package[5] << 16) + (package[6] << 8) + package[7];
-            package.move (8, 0, package.length - 8);
+            package.move (8, 0, package.length - 7);
             string name = (string)package;
+
+            debug ("File request received: #%u -> %s[%u Bytes]", id, name, size);
 
             file_requests.@set (id, { id, size, name });
         }

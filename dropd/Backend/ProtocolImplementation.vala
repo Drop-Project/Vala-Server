@@ -18,9 +18,6 @@
  */
 
 public abstract class dropd.Backend.ProtocolImplementation : Object {
-    /* Bidirectional commands */
-    protected static const uint8 GLOBAL_COMMAND_PROTOCOL_FAILURE = 1;
-
     /* Client -> Server */
     protected static const uint8 CLIENT_COMMAND_FILE_REQUEST = 2;
 
@@ -34,11 +31,11 @@ public abstract class dropd.Backend.ProtocolImplementation : Object {
         this.output_stream = output_stream;
     }
 
-    protected void send_package (uint8 command, uint8[] data) {
+    protected void send_package (uint8[] data) {
         try {
-            uint16 package_length = (uint16)(data.length + 1);
+            uint16 package_length = (uint16)(data.length);
 
-            output_stream.write ({ (uint8)((package_length >> 8) & 0xff), (uint8)(package_length & 0xff), command });
+            output_stream.write ({ (uint8)((package_length >> 8) & 0xff), (uint8)(package_length & 0xff) });
             output_stream.write (data);
         } catch (Error e) {
             warning ("Sending package failed: %s", e.message);
@@ -50,7 +47,7 @@ public abstract class dropd.Backend.ProtocolImplementation : Object {
             uint8[] header = new uint8[2];
 
             if (input_stream.read (header) != 2) {
-                protocol_failure ("Invalid package header.");
+                warning ("Receiving package failed: Invalid package header.");
 
                 return null;
             }
@@ -58,20 +55,21 @@ public abstract class dropd.Backend.ProtocolImplementation : Object {
             uint16 package_length = (header[0] << 8) + header[1];
 
             if (expected_length > 0 && package_length != expected_length) {
-                protocol_failure ("Unexpected package length.");
+                warning ("Unexpected package length while receiving package. Correcting...");
                 package_length = expected_length;
             }
 
             uint8[] package = new uint8[package_length];
+            uint16 received_length = (uint16)input_stream.read (package);
 
-            if (input_stream.read (package) != package_length) {
-                protocol_failure ("Invalid package.");
+            if (received_length != package_length) {
+                warning ("Receiving package failed: Invalid package. Received %u of %u bytes.", received_length, package_length);
 
                 return null;
             }
 
             if (package[0] != expected_commmand) {
-                protocol_failure ("Unexpected command.");
+                warning ("Receiving package failed: Unexpected command.");
 
                 return null;
             }
@@ -82,10 +80,5 @@ public abstract class dropd.Backend.ProtocolImplementation : Object {
 
             return null;
         }
-    }
-
-    private void protocol_failure (string message) {
-        warning ("Protocol failure: %s", message);
-        send_package (GLOBAL_COMMAND_PROTOCOL_FAILURE, message.data);
     }
 }
