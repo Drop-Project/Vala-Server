@@ -31,7 +31,7 @@ public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
 
     public struct FileRequest {
         uint16 id;
-        uint32 size;
+        uint64 size;
         string name;
     }
 
@@ -85,12 +85,19 @@ public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
 
             last_file = (package[1] == 1);
 
-            uint16 id = (package[2] << 8) + package[3];
-            uint32 size = (package[4] << 24) + (package[5] << 16) + (package[6] << 8) + package[7];
-            package.move (8, 0, package.length - 7);
+            uint16 id = (package[2] << 8) +
+                        package[3];
+
+            uint64 size = ((uint64)package[4] << 32) +
+                          ((uint32)package[5] << 24) +
+                          ((uint32)package[6] << 16) +
+                          ((uint16)package[7] << 8) +
+                          (uint8)package[8];
+
+            package.move (9, 0, package.length - 8);
             string name = (string)package;
 
-            debug ("File request received: #%u -> %s[%u Bytes]", id, name, size);
+            debug ("File request received: #%u -> %s[%s Bytes]", id, name, size.to_string ());
 
             file_requests.@set (id, { id, size, name });
         }

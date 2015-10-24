@@ -32,7 +32,7 @@ public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
 
     public struct FileRequest {
         uint16 id;
-        uint32 size;
+        uint64 size;
         string name;
         string filename;
     }
@@ -89,10 +89,10 @@ public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
 
                 FileInfo info = file.query_info (FileAttribute.STANDARD_SIZE, FileQueryInfoFlags.NONE);
                 int id = file_requests.size;
-                uint32 size = (uint32)info.get_size ();
+                uint64 size = (uint64)info.get_size ();
                 string name = file.get_basename ();
 
-                debug ("File loaded: #%i -> %s[%u Bytes]", id, name, size);
+                debug ("File loaded: #%i -> %s[%s Bytes]", id, name, size.to_string ());
 
                 file_requests.@set (id, { (uint16)id, size, name, filename });
             }
@@ -114,6 +114,7 @@ public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
             package += (entry.key == file_request.size - 1 ? 1 : 0);
             package += (uint8)(file_request.id >> 8) & 0xff;
             package += (uint8)file_request.id & 0xff;
+            package += (uint8)(file_request.size >> 32) & 0xff;
             package += (uint8)(file_request.size >> 24) & 0xff;
             package += (uint8)(file_request.size >> 16) & 0xff;
             package += (uint8)(file_request.size >> 8) & 0xff;

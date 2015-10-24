@@ -79,8 +79,6 @@ public class dropd.Backend.DBusInterface : Object {
                         } catch (Error e) {
                             warning ("Registering DBus interface %s failed: %s", interface_path, e.message);
                         }
-                    }, null, () => {
-                        warning ("Could not aquire DBus name.");
                     });
 
                     protocol_implementation.protocol_failed.connect ((error_message) => {

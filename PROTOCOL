@@ -1,15 +1,15 @@
 Drop Protocol v1
 
 Package
-    [UINT16] Package Length
+    [2 BYTES] Package Length
     [BYTES] Package
 
 
 Client => Server
 
 File Request
-    [BYTE] Command ( 2 )
-    [BYTE] Last File ( 0 / 1 )
-    [UINT16] File ID
-    [UINT32] File Size
-    [BYTES] File Name
+    [1 BYTE] Command ( 2 )
+    [1 BYTE] Last File ( 0 / 1 )
+    [2 BYTES] File ID
+    [5 Bytes] File Size
+    [? BYTES] File Name
