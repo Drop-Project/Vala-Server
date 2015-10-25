@@ -54,7 +54,7 @@ public class dropd.Backend.ServiceBrowser : Object {
         TransmissionPartner[] partners = {};
 
         transmission_partners.@foreach ((entry) => {
-            if (!show_myself && entry.value.hostname == Environment.get_host_name ()) {
+            if (!show_myself && entry.value.hostname.down ().replace (".local", "") == Environment.get_host_name ().down ()) {
                 return true;
             }
 
