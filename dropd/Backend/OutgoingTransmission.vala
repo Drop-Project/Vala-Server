@@ -41,6 +41,8 @@ public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
 
     public signal void protocol_failed (string error_message);
     public signal void state_changed (ClientState state);
+    public signal void progress_changed (uint64 bytes_sent, uint64 total_size);
+    public signal void file_sent (uint id);
 
     private ClientState state = ClientState.LOADING_FILES;
 
@@ -275,11 +277,13 @@ public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
                     }
 
                     bytes_sent += next_size;
+                    progress_changed (bytes_sent, total_size);
                 }
 
                 input_stream.close ();
 
                 files_processed++;
+                file_sent (file_request.id);
 
                 return true;
             } catch (Error e) {

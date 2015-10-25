@@ -40,6 +40,8 @@ public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
 
     public signal void protocol_failed (string error_message);
     public signal void state_changed (ServerState state);
+    public signal void progress_changed (uint64 bytes_received, uint64 total_size);
+    public signal void file_received (uint id, string filename);
 
     private ServerState state = ServerState.AWAITING_INITIALISATION;
 
@@ -52,7 +54,7 @@ public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
 
         new Thread<int> (null, () => {
             if (!receive_initialisation ()) {
-                protocol_failed (_("Receiving request failed."));
+                protocol_failed (_("Receiving initialisation failed."));
                 update_state (ServerState.FAILURE);
 
                 return 0;
@@ -300,11 +302,13 @@ public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
                     }
 
                     bytes_received += next_package.length;
+                    progress_changed (bytes_received, total_size);
                 }
 
                 output_stream.close ();
 
                 files_received++;
+                file_received (id, file.get_path ());
             } catch (Error e) {
                 warning ("Receiving file \"%s\" failed: %s", file_request.name, e.message);
 
