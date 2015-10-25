@@ -6,7 +6,7 @@ Directions
 
 Package
     [2 BYTES] Package Length
-    [BYTES] Package
+    [BYTES] Package (max. 2^14 bytes)
 
 
 VERSION 1
@@ -33,6 +33,6 @@ One time per file {
 
     Until file is completed {
         => Transmission
-            [UP TO 2^16 BYTES] Data
+            [UP TO 2^14 BYTES] Data
     }
 }
