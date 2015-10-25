@@ -1,15 +1,38 @@
-Drop Protocol v1
+Drop Protocol
+
+Directions
+    Client => Server
+    Client <= Server
 
 Package
     [2 BYTES] Package Length
     [BYTES] Package
 
 
-Client => Server
+VERSION 1
 
-File Request
-    [1 BYTE] Command ( 2 )
-    [1 BYTE] Last File ( 0 / 1 )
-    [2 BYTES] File ID
-    [5 Bytes] File Size
-    [? BYTES] File Name
+=> Initialisation
+    [1 Byte] Client Version
+    [STRING] Client Name
+
+One time per file {
+    => File Request
+        [1 BYTE] Last File ( 0 / 1 )
+        [2 BYTES] File ID
+        [5 BYTES] File Size
+        [STRING] File Name
+}
+
+<= Confirmation
+    [1 BYTE] Accepted ( 0 / 1 )
+    [LIST OF 2 BYTES] Accepted files
+
+One time per file {
+    => File Header
+        [2 BYTES] File ID
+
+    Until file is completed {
+        => Transmission
+            [UP TO 2^16 BYTES] Data
+    }
+}

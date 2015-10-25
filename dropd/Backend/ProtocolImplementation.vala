@@ -18,11 +18,6 @@
  */
 
 public abstract class dropd.Backend.ProtocolImplementation : Object {
-    /* Client -> Server */
-    protected static const uint8 CLIENT_COMMAND_FILE_REQUEST = 2;
-
-    /* Server -> Client */
-
     protected InputStream input_stream;
     protected OutputStream output_stream;
 
@@ -42,7 +37,7 @@ public abstract class dropd.Backend.ProtocolImplementation : Object {
         }
     }
 
-    protected uint8[]? receive_package (uint8 expected_commmand = 0, uint16 expected_length = 0) {
+    protected uint8[]? receive_package (uint16 expected_length = 0) {
         try{
             uint8[] header = new uint8[2];
 
@@ -64,12 +59,6 @@ public abstract class dropd.Backend.ProtocolImplementation : Object {
 
             if (received_length != package_length) {
                 warning ("Receiving package failed: Invalid package. Received %u of %u bytes.", received_length, package_length);
-
-                return null;
-            }
-
-            if (package[0] != expected_commmand) {
-                warning ("Receiving package failed: Unexpected command.");
 
                 return null;
             }

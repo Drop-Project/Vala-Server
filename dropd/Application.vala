@@ -26,7 +26,7 @@ public class dropd.Application : Granite.Application {
      * Clients are using this field to decide, if they are compatible
      * to the server or not.
      */
-    public static const int PROTOCOL_VERSION = 1;
+    public static const uint8 PROTOCOL_VERSION = 1;
 
     /*
      * This field describes the implementation of the drop protocol
@@ -86,7 +86,7 @@ public class dropd.Application : Granite.Application {
         service_provider = new Backend.ServiceProvider (client, settings_manager);
         service_browser = new Backend.ServiceBrowser (client);
         server = new Backend.Server ();
-        dbus_interface = new Backend.DBusInterface (server, service_browser);
+        dbus_interface = new Backend.DBusInterface (server, settings_manager, service_browser);
 
         try {
             client.start ();

@@ -84,14 +84,17 @@ public class dropd.Backend.Server : ThreadedSocketService {
                     }
                 });
 
-                protocol_implementation.protocol_failed.connect ((error_message) => {
-                    warning ("Protocol failed: %s", error_message);
+                protocol_implementation.state_changed.connect ((state) => {
+                    if (state != IncomingTransmission.ServerState.FAILURE &&
+                        state != IncomingTransmission.ServerState.REJECTED) {
+                        return;
+                    }
 
                     /* Close connection if possible/necessary */
                     try {
                         tls_connection.close ();
 
-                        warning ("Connection closed.");
+                        debug ("Connection closed.");
                     } catch {}
 
                     /* Close DBus interface */

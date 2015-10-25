@@ -24,12 +24,14 @@ public class dropd.Backend.DBusInterface : Object {
     public signal void transmission_partners_changed ();
 
     private Server server;
+    private SettingsManager settings_manager;
     private ServiceBrowser service_browser;
 
     private uint transmission_counter = 0;
 
-    public DBusInterface (Server server, ServiceBrowser service_browser) {
+    public DBusInterface (Server server, SettingsManager settings_manager, ServiceBrowser service_browser) {
         this.server = server;
+        this.settings_manager = settings_manager;
         this.service_browser = service_browser;
 
         connect_signals ();
@@ -68,7 +70,9 @@ public class dropd.Backend.DBusInterface : Object {
                 } else {
                     debug ("Connection established.");
 
-                    OutgoingTransmission protocol_implementation = new OutgoingTransmission (connection, files);
+                    OutgoingTransmission protocol_implementation = new OutgoingTransmission (connection,
+                                                                                             settings_manager.server_name.strip () == "" ? Environment.get_host_name () : settings_manager.server_name,
+                                                                                             files);
 
                     uint interface_id = Bus.own_name (BusType.SESSION, "org.dropd.OutgoingTransmission", BusNameOwnerFlags.NONE, (dbus_connection) => {
                         try {
@@ -81,14 +85,17 @@ public class dropd.Backend.DBusInterface : Object {
                         }
                     });
 
-                    protocol_implementation.protocol_failed.connect ((error_message) => {
-                        warning ("Protocol failed: %s", error_message);
+                    protocol_implementation.state_changed.connect ((state) => {
+                        if (state != OutgoingTransmission.ClientState.FAILURE &&
+                            state != OutgoingTransmission.ClientState.REJECTED) {
+                            return;
+                        }
 
                         /* Close connection if possible/necessary */
                         try {
                             connection.close ();
 
-                            warning ("Connection closed.");
+                            debug ("Connection closed.");
                         } catch {}
 
                         /* Close DBus interface */
@@ -109,12 +116,22 @@ public class dropd.Backend.DBusInterface : Object {
 
     private SocketConnection? connect_to_address (InetAddress address) {
         try {
+            Cancellable cancellable = new Cancellable ();
             SocketClient client = new SocketClient ();
             client.event.connect (on_client_event);
-            client.timeout = 10;
             client.tls = true;
 
-            return client.connect (new InetSocketAddress (address, Application.PORT));
+            /*
+             * We need to do the timeout stuff manually, because the built-in
+             * timeout functionalities affect the connection as well.
+             */
+            Timeout.add (10 * 1000, () => {
+                cancellable.cancel ();
+
+                return false;
+            });
+
+            return client.connect (new InetSocketAddress (address, Application.PORT), cancellable);
         } catch (Error e) {
             warning ("Connecting to address failed: %s", e.message);
 
