@@ -49,7 +49,7 @@ public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
     private string client_name;
     private Gee.HashMap<uint16, FileRequest? > file_requests;
 
-    public IncomingTransmission (TlsServerConnection connection) {
+    public IncomingTransmission (IOStream connection) {
         base (connection.input_stream, connection.output_stream);
 
         new Thread<int> (null, () => {
