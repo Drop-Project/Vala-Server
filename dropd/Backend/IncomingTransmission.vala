@@ -45,7 +45,7 @@ public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
 
     private uint8 client_version;
     private string client_name;
-    private Gee.HashMap<int, FileRequest? > file_requests;
+    private Gee.HashMap<uint16, FileRequest? > file_requests;
 
     public IncomingTransmission (TlsServerConnection connection) {
         base (connection.input_stream, connection.output_stream);
@@ -81,7 +81,12 @@ public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
         update_state (ServerState.SENDING_CONFIRMATION);
 
         new Thread<int> (null, () => {
-            send_confirmation (false);
+            if (!send_confirmation (false)) {
+                protocol_failed (_("Sending confirmation failed."));
+                update_state (ServerState.FAILURE);
+
+                return 0;
+            }
 
             update_state (ServerState.REJECTED);
 
@@ -89,17 +94,35 @@ public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
         });
     }
 
-    public void accept_transmission (uint16[] accepted_ids) {
+    public void accept_transmission (uint16[] ids) {
         if (state != ServerState.NEEDS_CONFIRMATION) {
             return;
         }
 
         update_state (ServerState.SENDING_CONFIRMATION);
 
+        uint16[] accepted_ids = ids;
+
         new Thread<int> (null, () => {
-            send_confirmation (true, accepted_ids);
+            remember_accepted_ids (accepted_ids);
+
+            if (!send_confirmation (true, accepted_ids)) {
+                protocol_failed (_("Sending confirmation failed."));
+                update_state (ServerState.FAILURE);
+
+                return 0;
+            }
 
             update_state (ServerState.RECEIVING_DATA);
+
+            if (!receive_data ()) {
+                protocol_failed ("Receiving data failed.");
+                update_state (ServerState.FAILURE);
+
+                return 0;
+            }
+
+            update_state (ServerState.FINISHED);
 
             return 0;
         });
@@ -146,7 +169,7 @@ public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
     }
 
     private bool receive_request () {
-        file_requests = new Gee.HashMap<int, FileRequest? > ();
+        file_requests = new Gee.HashMap<uint16, FileRequest? > ();
         bool last_file = false;
 
         do {
@@ -178,7 +201,20 @@ public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
         return true;
     }
 
-    private void send_confirmation (bool accepted, uint16[]? accepted_ids = null) {
+    private void remember_accepted_ids (uint16[] accepted_ids) {
+        foreach (uint16 id in accepted_ids) {
+            if (file_requests.has_key (id)) {
+                FileRequest file_request = file_requests.@get (id);
+                file_request.accepted = true;
+
+                debug ("File \"%s\" has been accepted.", file_request.name);
+
+                file_requests.@set (id, file_request);
+            }
+        }
+    }
+
+    private bool send_confirmation (bool accepted, uint16[]? accepted_ids = null) {
         bool accept = (accepted && accepted_ids != null);
 
         uint8[] package = {};
@@ -191,7 +227,92 @@ public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
             }
         }
 
-        send_package (package);
+        return send_package (package);
+    }
+
+    private bool receive_data () {
+        string target_directory = Environment.get_user_special_dir (UserDirectory.DOWNLOAD);
+
+        uint16 files_received = 0;
+        uint16 files_expected = 0;
+
+        file_requests.@foreach ((entry) => {
+            if (entry.value.accepted) {
+                files_expected++;
+            }
+
+            return true;
+        });
+
+        while (files_received < files_expected) {
+            uint8[]? package = receive_package ();
+
+            if (package == null) {
+                return false;
+            }
+
+            uint16 id = (package[0] << 8) +
+                        package[1];
+
+            if (!file_requests.has_key (id)) {
+                warning ("Received file #%i not requested.", id);
+
+                return false;
+            }
+
+            FileRequest file_request = file_requests.@get (id);
+
+            if (!file_request.accepted) {
+                warning ("Received file #%i not accepted.", id);
+
+                return false;
+            }
+
+            File file = File.new_for_path ("%s/%s".printf (target_directory, file_request.name));
+            int tries = 0;
+
+            /* Automatically manipulate name until target file isn't already existent. */
+            while (file.query_exists ()) {
+                file = File.new_for_path ("%s/%s.%i".printf (target_directory, file_request.name, ++tries));
+            }
+
+            try {
+                debug ("Creating file \"%s\"...", file.get_path ());
+
+                OutputStream output_stream = file.create (FileCreateFlags.NONE);
+
+                debug ("Receiving...");
+
+                uint64 total_size = file_request.size;
+                uint64 bytes_received = 0;
+
+                while (bytes_received < total_size) {
+                    uint8[]? next_package = receive_package ();
+
+                    if (next_package == null) {
+                        return false;
+                    }
+
+                    if (output_stream.write (next_package) != next_package.length) {
+                        warning ("Writing data to \"%s\" failed.", file.get_path ());
+
+                        return false;
+                    }
+
+                    bytes_received += next_package.length;
+                }
+
+                output_stream.close ();
+
+                files_received++;
+            } catch (Error e) {
+                warning ("Receiving file \"%s\" failed: %s", file_request.name, e.message);
+
+                return false;
+            }
+        }
+
+        return (files_received == files_expected);
     }
 
     private void update_state (ServerState state) {

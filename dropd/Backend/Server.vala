@@ -86,7 +86,9 @@ public class dropd.Backend.Server : ThreadedSocketService {
 
                 protocol_implementation.state_changed.connect ((state) => {
                     if (state != IncomingTransmission.ServerState.FAILURE &&
-                        state != IncomingTransmission.ServerState.REJECTED) {
+                        state != IncomingTransmission.ServerState.REJECTED &&
+                        state != IncomingTransmission.ServerState.CANCELED &&
+                        state != IncomingTransmission.ServerState.FINISHED) {
                         return;
                     }
 

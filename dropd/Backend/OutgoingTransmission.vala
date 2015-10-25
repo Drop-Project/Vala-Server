@@ -44,7 +44,7 @@ public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
 
     private ClientState state = ClientState.LOADING_FILES;
 
-    private Gee.HashMap<int, FileRequest? > file_requests;
+    private Gee.HashMap<uint16, FileRequest? > file_requests;
 
     public OutgoingTransmission (SocketConnection connection, string client_name, string[] files) {
         base (connection.input_stream, connection.output_stream);
@@ -59,11 +59,21 @@ public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
 
             update_state (ClientState.SENDING_INITIALISATION);
 
-            send_initialisation (client_name);
+            if (!send_initialisation (client_name)) {
+                protocol_failed (_("Sending initialisation failed."));
+                update_state (ClientState.FAILURE);
+
+                return 0;
+            }
 
             update_state (ClientState.SENDING_REQUEST);
 
-            send_request ();
+            if (!send_request ()) {
+                protocol_failed (_("Sending request failed."));
+                update_state (ClientState.FAILURE);
+
+                return 0;
+            }
 
             update_state (ClientState.AWAITING_CONFIRMATION);
 
@@ -81,6 +91,8 @@ public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
 
                     return 0;
                 }
+
+                update_state (ClientState.FINISHED);
             }
 
             return 0;
@@ -91,8 +103,20 @@ public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
         return state;
     }
 
+    public FileRequest[] get_file_requests () {
+        FileRequest[] requests = {};
+
+        file_requests.@foreach ((entry) => {
+            requests += entry.value;
+
+            return true;
+        });
+
+        return requests;
+    }
+
     private bool load_files (string[] files) {
-        file_requests = new Gee.HashMap<int, FileRequest? > ();
+        file_requests = new Gee.HashMap<uint16, FileRequest? > ();
 
         if (files.length == 0) {
             warning ("No files specified.");
@@ -111,13 +135,13 @@ public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
                 }
 
                 FileInfo info = file.query_info (FileAttribute.STANDARD_SIZE, FileQueryInfoFlags.NONE);
-                int id = file_requests.size;
+                uint16 id = (uint16)file_requests.size;
                 uint64 size = (uint64)info.get_size ();
                 string name = file.get_basename ();
 
                 debug ("File loaded: #%i -> %s[%s Bytes]", id, name, size.to_string ());
 
-                file_requests.@set (id, { (uint16)id, size, name, filename, false });
+                file_requests.@set (id, { id, size, name, filename, false });
             }
         } catch (Error e) {
             warning ("Can't load files: %s", e.message);
@@ -128,7 +152,7 @@ public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
         return true;
     }
 
-    private void send_initialisation (string client_name) {
+    private bool send_initialisation (string client_name) {
         uint8[] package = {};
         package += (uint8)Application.PROTOCOL_VERSION;
 
@@ -136,10 +160,12 @@ public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
             package += client_name.data[i];
         }
 
-        send_package (package);
+        return send_package (package);
     }
 
-    private void send_request () {
+    private bool send_request () {
+        uint16 requests_sent = 0;
+
         file_requests.@foreach ((entry) => {
             FileRequest file_request = entry.value;
 
@@ -157,10 +183,16 @@ public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
                 package += file_request.name.data[i];
             }
 
-            send_package (package);
+            if (!send_package (package)) {
+                return false;
+            }
+
+            requests_sent++;
 
             return true;
         });
+
+        return (requests_sent == file_requests.size);
     }
 
     private bool receive_confirmation () {
@@ -178,8 +210,6 @@ public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
             return true;
         }
 
-        update_state (ClientState.SENDING_DATA);
-
         for (int i = 1; i < package.length - 1; i++) {
             uint16 id = (package[i] << 8) +
                         package[++i];
@@ -194,14 +224,22 @@ public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
             }
         }
 
+        update_state (ClientState.SENDING_DATA);
+
         return true;
     }
 
     private bool send_data () {
-        uint16 files_sent = 0;
+        uint16 files_processed = 0;
 
         file_requests.@foreach ((entry) => {
             FileRequest file_request = entry.value;
+
+            if (!file_request.accepted) {
+                files_processed++;
+
+                return true;
+            }
 
             File file = File.new_for_path (file_request.filename);
 
@@ -211,29 +249,37 @@ public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
                 return false;
             }
 
-            send_package ({ (uint8)((file_request.id >> 8) & 0xff),
-                            (uint8)(file_request.id & 0xff) });
+            if (!send_package ({ (uint8)((file_request.id >> 8) & 0xff),
+                                 (uint8)(file_request.id & 0xff) })) {
+                return false;
+            }
 
             try {
                 debug ("Opening file \"%s\"...", file_request.filename);
 
-                InputStream input_stream = file.open_readwrite ().input_stream;
+                InputStream input_stream = file.read ();
+
+                debug ("Sending...");
 
                 uint64 total_size = file_request.size;
                 uint64 bytes_sent = 0;
 
                 while (bytes_sent < total_size) {
-                    uint16 next_size = (uint16)(total_size - bytes_sent > uint16.MAX ? uint16.MAX : total_size - bytes_sent);
+                    uint16 next_size = (uint16)(total_size - bytes_sent > MAX_PACKAGE_LENGTH ? MAX_PACKAGE_LENGTH : total_size - bytes_sent);
                     uint8[] package = new uint8[next_size];
 
                     input_stream.read (package);
 
-                    send_package (package);
+                    if (!send_package (package)) {
+                        return false;
+                    }
+
+                    bytes_sent += next_size;
                 }
 
                 input_stream.close ();
 
-                files_sent++;
+                files_processed++;
 
                 return true;
             } catch (Error e) {
@@ -243,7 +289,7 @@ public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
             }
         });
 
-        return (files_sent == file_requests.size);
+        return (files_processed == file_requests.size);
     }
 
     private void update_state (ClientState state) {

@@ -102,6 +102,8 @@ public class dropd.Application : Granite.Application {
 
         connect_signals ();
 
+        info ("Initialization finished.");
+
         new MainLoop ().run ();
     }
 

@@ -87,7 +87,9 @@ public class dropd.Backend.DBusInterface : Object {
 
                     protocol_implementation.state_changed.connect ((state) => {
                         if (state != OutgoingTransmission.ClientState.FAILURE &&
-                            state != OutgoingTransmission.ClientState.REJECTED) {
+                            state != OutgoingTransmission.ClientState.REJECTED &&
+                            state != OutgoingTransmission.ClientState.CANCELED &&
+                            state != OutgoingTransmission.ClientState.FINISHED) {
                             return;
                         }
 

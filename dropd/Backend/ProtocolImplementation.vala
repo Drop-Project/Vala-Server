@@ -18,27 +18,40 @@
  */
 
 public abstract class dropd.Backend.ProtocolImplementation : Object {
-    protected InputStream input_stream;
-    protected OutputStream output_stream;
+    /* Packages bigger than 2^14 bytes are truncated by gio. */
+    protected static const uint16 MAX_PACKAGE_LENGTH = 16384;
+
+    private InputStream input_stream;
+    private OutputStream output_stream;
 
     protected ProtocolImplementation (InputStream input_stream, OutputStream output_stream) {
         this.input_stream = input_stream;
         this.output_stream = output_stream;
     }
 
-    protected void send_package (uint8[] data) {
+    protected bool send_package (uint8[] data) {
         try {
             uint16 package_length = (uint16)(data.length);
 
+            if (package_length > MAX_PACKAGE_LENGTH) {
+                warning ("Sending package failed: Package too big.");
+
+                return false;
+            }
+
             output_stream.write ({ (uint8)((package_length >> 8) & 0xff), (uint8)(package_length & 0xff) });
             output_stream.write (data);
+
+            return true;
         } catch (Error e) {
             warning ("Sending package failed: %s", e.message);
+
+            return false;
         }
     }
 
-    protected uint8[]? receive_package (uint16 expected_length = 0) {
-        try{
+    protected uint8[]? receive_package () {
+        try {
             uint8[] header = new uint8[2];
 
             if (input_stream.read (header) != 2) {
@@ -48,11 +61,6 @@ public abstract class dropd.Backend.ProtocolImplementation : Object {
             }
 
             uint16 package_length = (header[0] << 8) + header[1];
-
-            if (expected_length > 0 && package_length != expected_length) {
-                warning ("Unexpected package length while receiving package. Correcting...");
-                package_length = expected_length;
-            }
 
             uint8[] package = new uint8[package_length];
             uint16 received_length = (uint16)input_stream.read (package);
