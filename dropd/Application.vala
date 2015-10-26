@@ -33,7 +33,7 @@ public class dropd.Application : Granite.Application {
      * for debugging reasons. Don't copy the string 1:1 to a port or
      * modification of this server.
      */
-    public static const string PROTOCOL_IMPLEMENTATION = "elementary OS";
+    public static const string PROTOCOL_IMPLEMENTATION = "official-vala";
 
     /*
      * This value shouldn't be modified across all implemenations
