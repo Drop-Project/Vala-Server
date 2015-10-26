@@ -116,7 +116,7 @@ public class dropd.Application : Granite.Application {
                 warning ("Registering DBus interface /org/dropd failed: %s", e.message);
             }
         }, null, () => {
-            warning ("Could not aquire DBus name.");
+            warning ("Could not aquire DBus name org.dropd");
         });
     }
 

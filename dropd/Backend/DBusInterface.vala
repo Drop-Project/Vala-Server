@@ -27,12 +27,20 @@ public class dropd.Backend.DBusInterface : Object {
     private SettingsManager settings_manager;
     private ServiceBrowser service_browser;
 
+    private DBusConnection dbus_connection;
+
     private uint transmission_counter = 0;
 
     public DBusInterface (Server server, SettingsManager settings_manager, ServiceBrowser service_browser) {
         this.server = server;
         this.settings_manager = settings_manager;
         this.service_browser = service_browser;
+
+        Bus.own_name (BusType.SESSION, "org.dropd.OutgoingTransmission", BusNameOwnerFlags.NONE, (dbus_connection) => {
+            this.dbus_connection = dbus_connection;
+        }, null, () => {
+            warning ("Could not aquire DBus name org.dropd.OutgoingTransmission");
+        });
 
         connect_signals ();
     }
@@ -74,37 +82,34 @@ public class dropd.Backend.DBusInterface : Object {
                                                                                              settings_manager.server_name.strip () == "" ? Environment.get_host_name () : settings_manager.server_name,
                                                                                              files);
 
-                    uint interface_id = Bus.own_name (BusType.SESSION, "org.dropd.OutgoingTransmission", BusNameOwnerFlags.NONE, (dbus_connection) => {
-                        try {
-                            dbus_connection.register_object (interface_path, protocol_implementation);
-                            new_outgoing_transmission (interface_path);
+                    try {
+                        uint object_id = dbus_connection.register_object (interface_path, protocol_implementation);
 
-                            debug ("DBus interface %s registered.", interface_path);
-                        } catch (Error e) {
-                            warning ("Registering DBus interface %s failed: %s", interface_path, e.message);
-                        }
-                    });
+                        debug ("DBus interface %s registered.", interface_path);
 
-                    protocol_implementation.state_changed.connect ((state) => {
-                        if (state != OutgoingTransmission.ClientState.FAILURE &&
-                            state != OutgoingTransmission.ClientState.REJECTED &&
-                            state != OutgoingTransmission.ClientState.CANCELED &&
-                            state != OutgoingTransmission.ClientState.FINISHED) {
-                            return;
-                        }
+                        protocol_implementation.state_changed.connect ((state) => {
+                            if (state != OutgoingTransmission.ClientState.FAILURE &&
+                                state != OutgoingTransmission.ClientState.REJECTED &&
+                                state != OutgoingTransmission.ClientState.CANCELED &&
+                                state != OutgoingTransmission.ClientState.FINISHED) {
+                                return;
+                            }
 
-                        /* Close connection if possible/necessary */
-                        try {
-                            connection.close ();
+                            /* Close connection if possible/necessary */
+                            try {
+                                connection.close ();
 
-                            debug ("Connection closed.");
-                        } catch {}
+                                debug ("Connection closed.");
+                            } catch {}
 
-                        /* Close DBus interface */
-                        Bus.unown_name (interface_id);
+                            /* Close DBus interface */
+                            dbus_connection.unregister_object (object_id);
 
-                        debug ("DBus interface %s removed.", interface_path);
-                    });
+                            debug ("DBus interface %s removed.", interface_path);
+                        });
+                    } catch (Error e) {
+                        warning ("Registering DBus interface %s failed: %s", interface_path, e.message);
+                    }
                 }
             } catch (Error e) {
                 warning ("Resolving hostname \"%s\" failed: %s", hostname, e.message);

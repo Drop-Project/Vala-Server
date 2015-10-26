@@ -23,12 +23,20 @@ public class dropd.Backend.Server : ThreadedSocketService {
 
     public signal void new_transmission_interface_registered (string interface_path);
 
+    private DBusConnection dbus_connection;
+
     private TlsCertificate? server_certificate = null;
 
     private uint transmission_counter = 0;
 
     public Server () {
         Object (max_threads : -1);
+
+        Bus.own_name (BusType.SESSION, "org.dropd.IncomingTransmission", BusNameOwnerFlags.NONE, (dbus_connection) => {
+            this.dbus_connection = dbus_connection;
+        }, null, () => {
+            warning ("Could not aquire DBus name org.dropd.IncomingTransmission");
+        });
 
         debug ("Loading certificate from \"%s\"...", config.PKGDATADIR);
 
@@ -73,37 +81,35 @@ public class dropd.Backend.Server : ThreadedSocketService {
                 string interface_path = "/org/dropd/IncomingTransmission%u".printf (transmission_counter++);
                 IncomingTransmission protocol_implementation = new IncomingTransmission (tls_connection);
 
-                uint interface_id = Bus.own_name (BusType.SESSION, "org.dropd.IncomingTransmission", BusNameOwnerFlags.NONE, (dbus_connection) => {
-                    try {
-                        dbus_connection.register_object (interface_path, protocol_implementation);
-                        new_transmission_interface_registered (interface_path);
+                try {
+                    uint object_id = dbus_connection.register_object (interface_path, protocol_implementation);
+                    new_transmission_interface_registered (interface_path);
 
-                        debug ("DBus interface %s registered.", interface_path);
-                    } catch (Error e) {
-                        warning ("Registering DBus interface %s failed: %s", interface_path, e.message);
-                    }
-                });
+                    debug ("DBus interface %s registered.", interface_path);
 
-                protocol_implementation.state_changed.connect ((state) => {
-                    if (state != IncomingTransmission.ServerState.FAILURE &&
-                        state != IncomingTransmission.ServerState.REJECTED &&
-                        state != IncomingTransmission.ServerState.CANCELED &&
-                        state != IncomingTransmission.ServerState.FINISHED) {
-                        return;
-                    }
+                    protocol_implementation.state_changed.connect ((state) => {
+                        if (state != IncomingTransmission.ServerState.FAILURE &&
+                            state != IncomingTransmission.ServerState.REJECTED &&
+                            state != IncomingTransmission.ServerState.CANCELED &&
+                            state != IncomingTransmission.ServerState.FINISHED) {
+                            return;
+                        }
 
-                    /* Close connection if possible/necessary */
-                    try {
-                        tls_connection.close ();
+                        /* Close connection if possible/necessary */
+                        try {
+                            tls_connection.close ();
 
-                        debug ("Connection closed.");
-                    } catch {}
+                            debug ("Connection closed.");
+                        } catch {}
 
-                    /* Close DBus interface */
-                    Bus.unown_name (interface_id);
+                        /* Close DBus interface */
+                        dbus_connection.unregister_object (object_id);
 
-                    debug ("DBus interface %s removed.", interface_path);
-                });
+                        debug ("DBus interface %s removed.", interface_path);
+                    });
+                } catch (Error e) {
+                    warning ("Registering DBus interface %s failed: %s", interface_path, e.message);
+                }
             } catch (Error e) {
                 warning ("Creating tls connection failed: %s", e.message);
             }
