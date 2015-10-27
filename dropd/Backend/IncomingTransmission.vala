@@ -162,7 +162,7 @@ public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
     }
 
     private bool receive_initialisation () {
-        uint8[]? package = receive_package ();
+        uint8[]? package = receive_package (2);
 
         if (package == null) {
             return false;
@@ -182,7 +182,7 @@ public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
         bool last_file = false;
 
         do {
-            uint8[]? package = receive_package ();
+            uint8[]? package = receive_package (9);
 
             if (package == null) {
                 return false;
@@ -254,7 +254,7 @@ public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
         });
 
         while (files_received < files_expected) {
-            uint8[]? package = receive_package ();
+            uint8[]? package = receive_package (2);
 
             if (package == null) {
                 return false;
@@ -296,7 +296,13 @@ public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
                 uint64 bytes_received = 0;
 
                 while (bytes_received < total_size) {
-                    uint8[]? next_package = receive_package ();
+                    uint64 next_size = (total_size - bytes_received);
+
+                    if (next_size > MAX_PACKAGE_LENGTH) {
+                        next_size = MAX_PACKAGE_LENGTH;
+                    }
+
+                    uint8[]? next_package = receive_package ((uint16)next_size);
 
                     if (next_package == null) {
                         return false;

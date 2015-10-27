@@ -205,7 +205,7 @@ public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
     }
 
     private bool receive_confirmation () {
-        uint8[]? package = receive_package ();
+        uint8[]? package = receive_package (1);
 
         if (package == null) {
             return false;
@@ -274,7 +274,12 @@ public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
                 uint64 bytes_sent = 0;
 
                 while (bytes_sent < total_size) {
-                    uint16 next_size = (uint16)(total_size - bytes_sent > MAX_PACKAGE_LENGTH ? MAX_PACKAGE_LENGTH : total_size - bytes_sent);
+                    uint64 next_size = (total_size - bytes_sent);
+
+                    if (next_size > MAX_PACKAGE_LENGTH) {
+                        next_size = MAX_PACKAGE_LENGTH;
+                    }
+
                     uint8[] package = new uint8[next_size];
 
                     input_stream.read (package);

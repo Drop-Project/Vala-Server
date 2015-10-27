@@ -50,7 +50,7 @@ public abstract class dropd.Backend.ProtocolImplementation : Object {
         }
     }
 
-    protected uint8[]? receive_package () {
+    protected uint8[]? receive_package (uint16 expected_min_length = 1) {
         try {
             size_t header_length;
             uint8[] header = new uint8[2];
@@ -68,6 +68,12 @@ public abstract class dropd.Backend.ProtocolImplementation : Object {
             }
 
             uint16 expected_package_length = (header[0] << 8) + header[1];
+
+            if (expected_package_length < expected_min_length) {
+                warning ("Receiving package failed: Package size %u too small.", expected_package_length);
+
+                return null;
+            }
 
             size_t package_length;
             uint8[] package = new uint8[expected_package_length];
