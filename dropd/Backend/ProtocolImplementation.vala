@@ -52,21 +52,34 @@ public abstract class dropd.Backend.ProtocolImplementation : Object {
 
     protected uint8[]? receive_package () {
         try {
+            size_t header_length;
             uint8[] header = new uint8[2];
 
-            if (input_stream.read (header) != 2) {
+            if (!input_stream.read_all (header, out header_length)) {
+                warning ("Receiving package failed: Error while reading header.");
+
+                return null;
+            }
+
+            if (header_length != 2) {
                 warning ("Receiving package failed: Invalid package header.");
 
                 return null;
             }
 
-            uint16 package_length = (header[0] << 8) + header[1];
+            uint16 expected_package_length = (header[0] << 8) + header[1];
 
-            uint8[] package = new uint8[package_length];
-            uint16 received_length = (uint16)input_stream.read (package);
+            size_t package_length;
+            uint8[] package = new uint8[expected_package_length];
 
-            if (received_length != package_length) {
-                warning ("Receiving package failed: Invalid package. Received %u of %u bytes.", received_length, package_length);
+            if (!input_stream.read_all (package, out package_length)) {
+                warning ("Receiving package failed: Error while reading package.");
+
+                return null;
+            }
+
+            if (package_length != expected_package_length) {
+                warning ("Receiving package failed: Invalid package. Received %u of %u bytes.", (uint16)package_length, expected_package_length);
 
                 return null;
             }
