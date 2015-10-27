@@ -80,7 +80,8 @@ public class dropd.Backend.DBusInterface : Object {
 
                     OutgoingTransmission protocol_implementation = new OutgoingTransmission (connection,
                                                                                              settings_manager.server_name.strip () == "" ? Environment.get_host_name () : settings_manager.server_name,
-                                                                                             files);
+                                                                                             files,
+                                                                                             require_tls);
 
                     try {
                         uint object_id = dbus_connection.register_object (interface_path, protocol_implementation);

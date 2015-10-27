@@ -44,12 +44,15 @@ public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
     public signal void progress_changed (uint64 bytes_sent, uint64 total_size);
     public signal void file_sent (uint id);
 
+    private bool is_secure = false;
     private ClientState state = ClientState.LOADING_FILES;
 
     private Gee.HashMap<uint16, FileRequest? > file_requests;
 
-    public OutgoingTransmission (SocketConnection connection, string client_name, string[] files) {
+    public OutgoingTransmission (SocketConnection connection, string client_name, string[] files, bool is_secure) {
         base (connection.input_stream, connection.output_stream);
+
+        this.is_secure = is_secure;
 
         new Thread<int> (null, () => {
             if (!load_files (files)) {
@@ -99,6 +102,10 @@ public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
 
             return 0;
         });
+    }
+
+    public bool get_is_secure () {
+        return is_secure;
     }
 
     public ClientState get_state () {

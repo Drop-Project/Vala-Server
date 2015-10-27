@@ -43,14 +43,17 @@ public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
     public signal void progress_changed (uint64 bytes_received, uint64 total_size);
     public signal void file_received (uint id, string filename);
 
+    private bool is_secure = false;
     private ServerState state = ServerState.AWAITING_INITIALISATION;
 
     private uint8 client_version;
     private string client_name;
     private Gee.HashMap<uint16, FileRequest? > file_requests;
 
-    public IncomingTransmission (IOStream connection) {
+    public IncomingTransmission (IOStream connection, bool is_secure) {
         base (connection.input_stream, connection.output_stream);
+
+        this.is_secure = is_secure;
 
         new Thread<int> (null, () => {
             if (!receive_initialisation ()) {
@@ -128,6 +131,10 @@ public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
 
             return 0;
         });
+    }
+
+    public bool get_is_secure () {
+        return is_secure;
     }
 
     public ServerState get_state () {

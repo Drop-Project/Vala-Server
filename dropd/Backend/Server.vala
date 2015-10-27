@@ -91,9 +91,9 @@ public class dropd.Backend.Server : ThreadedSocketService {
 
                     debug ("Connection established.");
 
-                    protocol_implementation = new IncomingTransmission (tls_connection);
+                    protocol_implementation = new IncomingTransmission (tls_connection, true);
                 } else {
-                    protocol_implementation = new IncomingTransmission (connection);
+                    protocol_implementation = new IncomingTransmission (connection, false);
                 }
 
                 string interface_path = "/org/dropd/IncomingTransmission%u".printf (transmission_counter++);
