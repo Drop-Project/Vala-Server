@@ -21,6 +21,7 @@ public class dropd.Backend.ServiceBrowser : Object {
     public struct TransmissionPartner {
         string hostname;
         uint16 port;
+        uint16 unencrypted_port;
         int protocol_version;
         string protocol_implementation;
         string display_name;
@@ -31,6 +32,7 @@ public class dropd.Backend.ServiceBrowser : Object {
 
     private static const string SERVICE_FIELD_PROTOCOL_VERSION = "protocol-version";
     private static const string SERVICE_FIELD_PROTOCOL_IMPLEMENTATION = "protocol-implementation";
+    private static const string SERVICE_FIELD_UNENCRYPTED_PORT = "unencrypted-port";
     private static const string SERVICE_FIELD_DISPLAY_NAME = "display-name";
     private static const string SERVICE_FIELD_SERVER_ENABLED = "server-enabled";
 
@@ -103,6 +105,7 @@ public class dropd.Backend.ServiceBrowser : Object {
                 transmission_partners.@set (name, {
                     hostname,
                     port,
+                    (uint16)uint64.parse (get_txt_field_value (txt, SERVICE_FIELD_UNENCRYPTED_PORT)),
                     int.parse (get_txt_field_value (txt, SERVICE_FIELD_PROTOCOL_VERSION)),
                     get_txt_field_value (txt, SERVICE_FIELD_PROTOCOL_IMPLEMENTATION),
                     get_txt_field_value (txt, SERVICE_FIELD_DISPLAY_NAME),

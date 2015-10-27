@@ -47,7 +47,8 @@ public class dropd.Backend.Server : ThreadedSocketService {
         }
 
         try {
-            this.add_inet_port (Application.PORT, null);
+            this.add_inet_port (Application.PORT, new ServerPort (Application.PORT));
+            this.add_inet_port (Application.UNENCRYPTED_PORT, new ServerPort (Application.UNENCRYPTED_PORT));
         } catch (Error e) {
             critical ("Registering port %u failed: %s", Application.PORT, e.message);
         }
@@ -56,30 +57,46 @@ public class dropd.Backend.Server : ThreadedSocketService {
     }
 
     private void connect_signals () {
-        this.run.connect ((connection) => {
+        this.run.connect ((connection, source_object) => {
+            ServerPort? current_port = (source_object as ServerPort);
+
+            if (current_port == null) {
+                return false;
+            }
+
+            bool provide_tls = (current_port.port == Application.PORT);
+
             try {
-                TlsServerConnection? tls_connection = TlsServerConnection.new (connection, server_certificate);
+                IncomingTransmission protocol_implementation;
+                TlsServerConnection? tls_connection = null;
 
-                debug ("Initializing new tls connection...");
+                if (provide_tls) {
+                    tls_connection = TlsServerConnection.new (connection, server_certificate);
 
-                if (tls_connection == null) {
-                    warning ("Creating tls connection failed.");
+                    debug ("Initializing new tls connection...");
 
-                    return false;
+                    if (tls_connection == null) {
+                        warning ("Creating tls connection failed.");
+
+                        return false;
+                    }
+
+                    debug ("Handshaking...");
+
+                    if (!tls_connection.handshake ()) {
+                        warning ("TLS-Handshake failed.");
+
+                        return false;
+                    }
+
+                    debug ("Connection established.");
+
+                    protocol_implementation = new IncomingTransmission (tls_connection);
+                } else {
+                    protocol_implementation = new IncomingTransmission (connection);
                 }
-
-                debug ("Handshaking...");
-
-                if (!tls_connection.handshake ()) {
-                    warning ("TLS-Handshake failed.");
-
-                    return false;
-                }
-
-                debug ("Connection established.");
 
                 string interface_path = "/org/dropd/IncomingTransmission%u".printf (transmission_counter++);
-                IncomingTransmission protocol_implementation = new IncomingTransmission (tls_connection);
 
                 try {
                     uint object_id = dbus_connection.register_object (interface_path, protocol_implementation);
@@ -97,7 +114,11 @@ public class dropd.Backend.Server : ThreadedSocketService {
 
                         /* Close connection if possible/necessary */
                         try {
-                            tls_connection.close ();
+                            if (provide_tls) {
+                                tls_connection.close ();
+                            } else {
+                                connection.close ();
+                            }
 
                             debug ("Connection closed.");
                         } catch {}

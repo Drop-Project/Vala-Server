@@ -49,7 +49,7 @@ public class dropd.Backend.DBusInterface : Object {
         return service_browser.get_transmission_partners (show_myself);
     }
 
-    public string start_outgoing_transmission (string hostname, string[] filenames) {
+    public string start_outgoing_transmission (string hostname, uint16 port, string[] filenames, bool require_tls) {
         string interface_path = "/org/dropd/OutgoingTransmission%u".printf (transmission_counter++);
         string[] files = filenames;
 
@@ -64,9 +64,9 @@ public class dropd.Backend.DBusInterface : Object {
 
                 /* Try all addresses until one works */
                 foreach (InetAddress address in addresses) {
-                    debug ("Trying to connect to %s...", address.to_string ());
+                    debug ("Trying to connect to %s:%u...", address.to_string (), port);
 
-                    connection = connect_to_address (address);
+                    connection = connect_to_address (address, port, require_tls);
 
                     if (connection != null) {
                         break;
@@ -121,12 +121,12 @@ public class dropd.Backend.DBusInterface : Object {
         return interface_path;
     }
 
-    private SocketConnection? connect_to_address (InetAddress address) {
+    private SocketConnection? connect_to_address (InetAddress address, uint16 port, bool require_tls) {
         try {
             Cancellable cancellable = new Cancellable ();
             SocketClient client = new SocketClient ();
             client.event.connect (on_client_event);
-            client.tls = true;
+            client.tls = require_tls;
 
             /*
              * We need to do the timeout stuff manually, because the built-in
@@ -138,7 +138,7 @@ public class dropd.Backend.DBusInterface : Object {
                 return false;
             });
 
-            return client.connect (new InetSocketAddress (address, Application.PORT), cancellable);
+            return client.connect (new InetSocketAddress (address, port), cancellable);
         } catch (Error e) {
             warning ("Connecting to address failed: %s", e.message);
 

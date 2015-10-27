@@ -10,6 +10,7 @@ vala_precompile (VALA_C
     Backend/ServiceProvider.vala
     Backend/ServiceBrowser.vala
     Backend/Server.vala
+    Backend/ServerPort.vala
     Backend/ProtocolImplementation.vala
     Backend/IncomingTransmission.vala
     Backend/OutgoingTransmission.vala

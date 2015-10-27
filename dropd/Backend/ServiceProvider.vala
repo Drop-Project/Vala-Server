@@ -22,6 +22,7 @@ public class dropd.Backend.ServiceProvider : Object {
 
     private static const string SERVICE_FIELD_PROTOCOL_VERSION = "protocol-version";
     private static const string SERVICE_FIELD_PROTOCOL_IMPLEMENTATION = "protocol-implementation";
+    private static const string SERVICE_FIELD_UNENCRYPTED_PORT = "unencrypted-port";
     private static const string SERVICE_FIELD_DISPLAY_NAME = "display-name";
     private static const string SERVICE_FIELD_SERVER_ENABLED = "server-enabled";
 
@@ -60,6 +61,7 @@ public class dropd.Backend.ServiceProvider : Object {
                         service = entry_group.add_service (Environment.get_host_name (), SERVICE_TYPE, Application.PORT);
                         set_service_field (SERVICE_FIELD_PROTOCOL_VERSION, Application.PROTOCOL_VERSION.to_string ());
                         set_service_field (SERVICE_FIELD_PROTOCOL_IMPLEMENTATION, Application.PROTOCOL_IMPLEMENTATION);
+                        set_service_field (SERVICE_FIELD_UNENCRYPTED_PORT, Application.UNENCRYPTED_PORT.to_string ());
                         set_service_field (SERVICE_FIELD_DISPLAY_NAME, settings_manager.server_name.strip () == "" ? Environment.get_host_name () : settings_manager.server_name);
                         set_service_field (SERVICE_FIELD_SERVER_ENABLED, settings_manager.server_enabled.to_string ());
                         entry_group.commit ();

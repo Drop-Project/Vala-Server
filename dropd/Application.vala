@@ -36,10 +36,14 @@ public class dropd.Application : Granite.Application {
     public static const string PROTOCOL_IMPLEMENTATION = "official-vala";
 
     /*
-     * This value shouldn't be modified across all implemenations
+     * These ports should be kept across all implemenations
      * to serve optimal compatibility.
+     *
+     * The unencrypted port is optinal and can be added to implementations
+     * to allow an alternative and eventually faster transmission.
      */
     public static const uint16 PORT = 7431;
+    public static const uint16 UNENCRYPTED_PORT = 7432;
 
     private Avahi.Client client;
 
