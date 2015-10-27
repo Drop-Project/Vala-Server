@@ -21,7 +21,8 @@
 public class dropd.Backend.DBusInterface : Object {
     public signal void new_incoming_transmission (string interface_path);
     public signal void new_outgoing_transmission (string interface_path);
-    public signal void transmission_partners_changed ();
+    public signal void transmission_partner_added (ServiceBrowser.TransmissionPartner transmission_partner);
+    public signal void transmission_partner_removed (string name);
 
     private Server server;
     private SettingsManager settings_manager;
@@ -161,5 +162,7 @@ public class dropd.Backend.DBusInterface : Object {
 
     private void connect_signals () {
         server.new_transmission_interface_registered.connect ((interface_path) => new_incoming_transmission (interface_path));
+        service_browser.transmission_partner_added.connect ((transmission_partner) => transmission_partner_added (transmission_partner));
+        service_browser.transmission_partner_removed.connect ((name) => transmission_partner_removed (name));
     }
 }

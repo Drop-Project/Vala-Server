@@ -19,6 +19,7 @@
 
 public class dropd.Backend.ServiceBrowser : Object {
     public struct TransmissionPartner {
+        string name;
         string hostname;
         uint16 port;
         uint16 unencrypted_port;
@@ -36,9 +37,12 @@ public class dropd.Backend.ServiceBrowser : Object {
     private static const string SERVICE_FIELD_DISPLAY_NAME = "display-name";
     private static const string SERVICE_FIELD_SERVER_ENABLED = "server-enabled";
 
-    private Gee.HashMap<string, TransmissionPartner? > transmission_partners;
+    public signal void transmission_partner_added (TransmissionPartner transmission_partner);
+    public signal void transmission_partner_removed (string name);
 
     public Avahi.Client client { private get; construct; }
+
+    private Gee.HashMap<string, TransmissionPartner? > transmission_partners;
 
     private Avahi.ServiceBrowser browser;
 
@@ -102,7 +106,8 @@ public class dropd.Backend.ServiceBrowser : Object {
                     return;
                 }
 
-                transmission_partners.@set (name, {
+                TransmissionPartner transmission_partner = {
+                    name,
                     hostname,
                     port,
                     (uint16)uint64.parse (get_txt_field_value (txt, SERVICE_FIELD_UNENCRYPTED_PORT)),
@@ -110,7 +115,10 @@ public class dropd.Backend.ServiceBrowser : Object {
                     get_txt_field_value (txt, SERVICE_FIELD_PROTOCOL_IMPLEMENTATION),
                     get_txt_field_value (txt, SERVICE_FIELD_DISPLAY_NAME),
                     get_txt_field_value (txt, SERVICE_FIELD_SERVER_ENABLED) == "true"
-                });
+                };
+
+                transmission_partners.@set (name, transmission_partner);
+                transmission_partner_added (transmission_partner);
             });
 
             try {
@@ -131,6 +139,7 @@ public class dropd.Backend.ServiceBrowser : Object {
             debug ("Service \"%s\" disappeared.", name);
 
             transmission_partners.unset (name);
+            transmission_partner_removed (name);
         });
 
         browser.failure.connect ((error) => {
