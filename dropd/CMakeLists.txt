@@ -1,6 +1,3 @@
-# Include precompile package
-include (ValaPrecompile)
-
 # Configure precompile
 vala_precompile (VALA_C
     config.vala
