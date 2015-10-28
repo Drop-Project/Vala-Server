@@ -133,6 +133,14 @@ public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
         });
     }
 
+    public void cancel () {
+        debug ("Protocol canceled.");
+
+        cancellable.cancel ();
+
+        update_state (ServerState.CANCELED);
+    }
+
     public bool get_is_secure () {
         return is_secure;
     }
@@ -281,14 +289,14 @@ public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
             int tries = 0;
 
             /* Automatically manipulate name until target file isn't already existent. */
-            while (file.query_exists ()) {
+            while (file.query_exists (cancellable)) {
                 file = File.new_for_path ("%s/%s.%i".printf (target_directory, file_request.name, ++tries));
             }
 
             try {
                 debug ("Creating file \"%s\"...", file.get_path ());
 
-                OutputStream output_stream = file.create (FileCreateFlags.NONE);
+                OutputStream output_stream = file.create (FileCreateFlags.NONE, cancellable);
 
                 debug ("Receiving...");
 
@@ -308,7 +316,7 @@ public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
                         return false;
                     }
 
-                    if (output_stream.write (next_package) != next_package.length) {
+                    if (output_stream.write (next_package, cancellable) != next_package.length) {
                         warning ("Writing data to \"%s\" failed.", file.get_path ());
 
                         return false;
@@ -318,7 +326,7 @@ public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
                     progress_changed (bytes_received, total_size);
                 }
 
-                output_stream.close ();
+                output_stream.close (cancellable);
 
                 files_received++;
                 file_received (id, file.get_path ());

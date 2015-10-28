@@ -21,12 +21,16 @@ public abstract class dropd.Backend.ProtocolImplementation : Object {
     /* Packages bigger than 2^14 bytes are truncated by gio. */
     protected static const uint16 MAX_PACKAGE_LENGTH = 16384;
 
+    public Cancellable cancellable;
+
     private InputStream input_stream;
     private OutputStream output_stream;
 
     protected ProtocolImplementation (InputStream input_stream, OutputStream output_stream) {
         this.input_stream = input_stream;
         this.output_stream = output_stream;
+
+        cancellable = new Cancellable ();
     }
 
     protected bool send_package (uint8[] data) {
@@ -39,8 +43,8 @@ public abstract class dropd.Backend.ProtocolImplementation : Object {
                 return false;
             }
 
-            output_stream.write ({ (uint8)((package_length >> 8) & 0xff), (uint8)(package_length & 0xff) });
-            output_stream.write (data);
+            output_stream.write ({ (uint8)((package_length >> 8) & 0xff), (uint8)(package_length & 0xff) }, cancellable);
+            output_stream.write (data, cancellable);
 
             return true;
         } catch (Error e) {
@@ -55,7 +59,7 @@ public abstract class dropd.Backend.ProtocolImplementation : Object {
             size_t header_length;
             uint8[] header = new uint8[2];
 
-            if (!input_stream.read_all (header, out header_length)) {
+            if (!input_stream.read_all (header, out header_length, cancellable)) {
                 warning ("Receiving package failed: Error while reading header.");
 
                 return null;
@@ -78,7 +82,7 @@ public abstract class dropd.Backend.ProtocolImplementation : Object {
             size_t package_length;
             uint8[] package = new uint8[expected_package_length];
 
-            if (!input_stream.read_all (package, out package_length)) {
+            if (!input_stream.read_all (package, out package_length, cancellable)) {
                 warning ("Receiving package failed: Error while reading package.");
 
                 return null;

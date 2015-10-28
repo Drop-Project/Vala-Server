@@ -104,6 +104,14 @@ public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
         });
     }
 
+    public void cancel () {
+        debug ("Protocol canceled.");
+
+        cancellable.cancel ();
+
+        update_state (ClientState.CANCELED);
+    }
+
     public bool get_is_secure () {
         return is_secure;
     }
@@ -137,13 +145,13 @@ public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
             foreach (string filename in files) {
                 File file = File.new_for_path (filename);
 
-                if (!file.query_exists ()) {
+                if (!file.query_exists (cancellable)) {
                     warning ("File \"%s\" doesn't exist.", filename);
 
                     return false;
                 }
 
-                FileInfo info = file.query_info (FileAttribute.STANDARD_SIZE, FileQueryInfoFlags.NONE);
+                FileInfo info = file.query_info (FileAttribute.STANDARD_SIZE, FileQueryInfoFlags.NONE, cancellable);
                 uint16 id = (uint16)file_requests.size;
                 uint64 size = (uint64)info.get_size ();
                 string name = file.get_basename ();
@@ -252,7 +260,7 @@ public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
 
             File file = File.new_for_path (file_request.filename);
 
-            if (!file.query_exists ()) {
+            if (!file.query_exists (cancellable)) {
                 warning ("File \"%s\" doesn't exist anymore.", file_request.filename);
 
                 return false;
@@ -266,7 +274,7 @@ public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
             try {
                 debug ("Opening file \"%s\"...", file_request.filename);
 
-                InputStream input_stream = file.read ();
+                InputStream input_stream = file.read (cancellable);
 
                 debug ("Sending...");
 
@@ -282,7 +290,7 @@ public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
 
                     uint8[] package = new uint8[next_size];
 
-                    input_stream.read (package);
+                    input_stream.read (package, cancellable);
 
                     if (!send_package (package)) {
                         return false;
@@ -292,7 +300,7 @@ public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
                     progress_changed (bytes_sent, total_size);
                 }
 
-                input_stream.close ();
+                input_stream.close (cancellable);
 
                 files_processed++;
                 file_sent (file_request.id);
