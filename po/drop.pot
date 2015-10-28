@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-24 14:34+0200\n"
+"POT-Creation-Date: 2015-10-29 00:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,14 +17,35 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/IncomingTransmission.vala:50
+#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/IncomingTransmission.vala:60
+msgid "Receiving initialisation failed."
+msgstr ""
+
+#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/IncomingTransmission.vala:69
 msgid "Receiving request failed."
 msgstr ""
 
-#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/OutgoingTransmission.vala:52
+#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/IncomingTransmission.vala:90
+#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/IncomingTransmission.vala:115
+msgid "Sending confirmation failed."
+msgstr ""
+
+#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/OutgoingTransmission.vala:59
 msgid "Loading files failed."
 msgstr ""
 
-#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/OutgoingTransmission.vala:58
+#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/OutgoingTransmission.vala:68
+msgid "Sending initialisation failed."
+msgstr ""
+
+#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/OutgoingTransmission.vala:77
 msgid "Sending request failed."
+msgstr ""
+
+#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/OutgoingTransmission.vala:86
+msgid "Receiving confirmation failed."
+msgstr ""
+
+#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/OutgoingTransmission.vala:94
+msgid "Sending files failed."
 msgstr ""
