@@ -5,4 +5,6 @@ include (Translations)
 add_translations_directory ("drop")
 add_translations_catalog ("drop"
     ../dropd
+    ../dropd/Backend
+    ../lib
 )

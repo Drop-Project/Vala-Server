@@ -1,6 +1,9 @@
 # Configure precompile
 vala_precompile (LIB_VALA_C
     Session.vala
+    Interfaces.vala
+    IncomingTransmission.vala
+    OutgoingTransmission.vala
 PACKAGES
     gio-2.0
     gee-0.8
