@@ -6,6 +6,6 @@ valadoc \
 --vapidir=/usr/share/vala-0.30/vapi \
 --vapidir=/usr/share/vala/vapi \
 --directory=doc \
---pkg=gio-2.0 \
+--package-name=drop-1.0 \
 --pkg=drop-1.0 \
---deps
+/usr/share/vala/vapi/drop-1.0.vapi
