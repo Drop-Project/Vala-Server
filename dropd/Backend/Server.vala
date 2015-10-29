@@ -22,6 +22,7 @@ public class dropd.Backend.Server : ThreadedSocketService {
     private static const string KEY_PATH = config.PKGDATADIR + "/key.pem";
 
     public signal void new_transmission_interface_registered (string interface_path);
+    public signal void transmission_interface_removed (string interface_path);
 
     private DBusConnection dbus_connection;
 
@@ -100,6 +101,7 @@ public class dropd.Backend.Server : ThreadedSocketService {
 
                 try {
                     uint object_id = dbus_connection.register_object (interface_path, protocol_implementation);
+
                     new_transmission_interface_registered (interface_path);
 
                     debug ("DBus interface %s registered.", interface_path);
@@ -125,6 +127,8 @@ public class dropd.Backend.Server : ThreadedSocketService {
 
                         /* Close DBus interface */
                         dbus_connection.unregister_object (object_id);
+
+                        transmission_interface_removed (interface_path);
 
                         debug ("DBus interface %s removed.", interface_path);
                     });

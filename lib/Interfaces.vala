@@ -155,6 +155,8 @@ namespace Drop {
         public signal void transmission_partner_removed (string name);
 
         public abstract TransmissionPartner[] get_transmission_partners (bool show_myself = true) throws IOError;
+        public abstract string[] get_incoming_transmissions () throws IOError;
+        public abstract string[] get_outgoing_transmissions () throws IOError;
         public abstract string start_outgoing_transmission (string hostname, uint16 port, string[] filenames, bool require_tls) throws IOError;
     }
 

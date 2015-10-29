@@ -30,12 +30,18 @@ public class dropd.Backend.DBusInterface : Object {
 
     private DBusConnection dbus_connection;
 
+    private Gee.ArrayList<string> incoming_transmissions;
+    private Gee.ArrayList<string> outgoing_transmissions;
+
     private uint transmission_counter = 0;
 
     public DBusInterface (Server server, SettingsManager settings_manager, ServiceBrowser service_browser) {
         this.server = server;
         this.settings_manager = settings_manager;
         this.service_browser = service_browser;
+
+        incoming_transmissions = new Gee.ArrayList<string> ();
+        outgoing_transmissions = new Gee.ArrayList<string> ();
 
         Bus.own_name (BusType.SESSION, "org.dropd.OutgoingTransmission", BusNameOwnerFlags.NONE, (dbus_connection) => {
             this.dbus_connection = dbus_connection;
@@ -48,6 +54,14 @@ public class dropd.Backend.DBusInterface : Object {
 
     public ServiceBrowser.TransmissionPartner[] get_transmission_partners (bool show_myself = true) {
         return service_browser.get_transmission_partners (show_myself);
+    }
+
+    public string[] get_incoming_transmissions () {
+        return incoming_transmissions.to_array ();
+    }
+
+    public string[] get_outgoing_transmissions () {
+        return outgoing_transmissions.to_array ();
     }
 
     public string start_outgoing_transmission (string hostname, uint16 port, string[] filenames, bool require_tls) {
@@ -86,6 +100,8 @@ public class dropd.Backend.DBusInterface : Object {
 
                     try {
                         uint object_id = dbus_connection.register_object (interface_path, protocol_implementation);
+
+                        outgoing_transmissions.add (interface_path);
                         new_outgoing_transmission (interface_path);
 
                         debug ("DBus interface %s registered.", interface_path);
@@ -107,6 +123,8 @@ public class dropd.Backend.DBusInterface : Object {
 
                             /* Close DBus interface */
                             dbus_connection.unregister_object (object_id);
+
+                            outgoing_transmissions.remove (interface_path);
 
                             debug ("DBus interface %s removed.", interface_path);
                         });
@@ -162,7 +180,15 @@ public class dropd.Backend.DBusInterface : Object {
     }
 
     private void connect_signals () {
-        server.new_transmission_interface_registered.connect ((interface_path) => new_incoming_transmission (interface_path));
+        server.new_transmission_interface_registered.connect ((interface_path) => {
+            incoming_transmissions.add (interface_path);
+            new_incoming_transmission (interface_path);
+        });
+
+        server.transmission_interface_removed.connect ((interface_path) => {
+            incoming_transmissions.remove (interface_path);
+        });
+
         service_browser.transmission_partner_added.connect ((transmission_partner) => transmission_partner_added (transmission_partner));
         service_browser.transmission_partner_removed.connect ((name) => transmission_partner_removed (name));
     }

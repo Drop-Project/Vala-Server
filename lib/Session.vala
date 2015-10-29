@@ -72,6 +72,24 @@ public class Drop.Session : Object {
     }
 
     /**
+     * Returns a list of the running incoming transmissions.
+     *
+     * @return An array of dbus paths.
+     */
+    public string[] get_incoming_transmissions () throws IOError {
+        return daemon_bus.get_incoming_transmissions ();
+    }
+
+    /**
+     * Returns a list of the running outgoing transmissions.
+     *
+     * @return An array of dbus paths.
+     */
+    public string[] get_outgoing_transmissions () throws IOError {
+        return daemon_bus.get_outgoing_transmissions ();
+    }
+
+    /**
      * Starts a new outgoing transmisson.
      *
      * @param hostname The hostname or ip-address to connect to.
