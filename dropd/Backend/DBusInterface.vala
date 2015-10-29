@@ -86,6 +86,7 @@ public class dropd.Backend.DBusInterface : Object {
 
                     try {
                         uint object_id = dbus_connection.register_object (interface_path, protocol_implementation);
+                        new_outgoing_transmission (interface_path);
 
                         debug ("DBus interface %s registered.", interface_path);
 
