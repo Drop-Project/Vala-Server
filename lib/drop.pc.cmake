@@ -5,7 +5,7 @@ includedir=@DOLLAR@{prefix}/include/
 
 Name: Drop
 Description: Drop headers
-Version: 2.0
+Version: 1.0
 Libs: -ldrop-1.0
 Cflags: -I@DOLLAR@{includedir}/drop-1.0
-Requires: glib-2.0 gee-0.8
+Requires: glib-2.0 granite
