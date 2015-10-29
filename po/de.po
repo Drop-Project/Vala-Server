@@ -7,249 +7,45 @@ msgid ""
 msgstr ""
 "Project-Id-Version: drop\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2015-03-01 17:55+0100\n"
+"POT-Creation-Date: 2015-10-29 00:28+0100\n"
 "PO-Revision-Date: 2015-08-17 23:19+0000\n"
 "Last-Translator: Tobias Bannert <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-10-23 05:51+0000\n"
-"X-Generator: Launchpad (build 17812)\n"
+"X-Launchpad-Export-Date: 2015-10-29 05:40+0000\n"
+"X-Generator: Launchpad (build 17837)\n"
 
-#: /home/marcus/Projekte/drop/po/../client/DetailsPage.vala:51
-msgid "Receiver:"
-msgstr "Empfänger:"
-
-#: /home/marcus/Projekte/drop/po/../client/DetailsPage.vala:70
-#: /home/marcus/Projekte/drop/po/../server/TransmissionDialog.vala:80
-msgid "Number of files:"
-msgstr "Anzahl der Dateien:"
-
-#: /home/marcus/Projekte/drop/po/../client/DetailsPage.vala:84
-#: /home/marcus/Projekte/drop/po/../server/TransmissionDialog.vala:94
-msgid "Overall size:"
-msgstr "Gesamtgröße:"
-
-#: /home/marcus/Projekte/drop/po/../client/DetailsPage.vala:105
-msgid "Connect to server"
-msgstr "Mit Server verbinden"
-
-#: /home/marcus/Projekte/drop/po/../client/DetailsPage.vala:118
-#: /home/marcus/Projekte/drop/po/../client/TransmissionPage.vala:57
-#: /home/marcus/Projekte/drop/po/../client/ConnectingPage.vala:65
-#: /home/marcus/Projekte/drop/po/../client/RequestPage.vala:68
-#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:138
-msgid "Cancel"
-msgstr "Abbrechen"
-
-#: /home/marcus/Projekte/drop/po/../client/main.vala:75
-msgid "One or more files aren't existent."
-msgstr "Eine oder mehr Dateien existrieren nicht."
-
-#: /home/marcus/Projekte/drop/po/../client/main.vala:89
-msgid "Threads are not supported."
-msgstr "Mehrsträngigkeit wird nicht unterstützt."
-
-#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:74
-#, c-format
-msgid "<b>Transmission of %s %s</b>"
-msgstr "<b>Übertragung von %s %s</b>"
-
-#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:74
-msgid "file"
-msgstr "Datei"
-
-#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:74
-msgid "files"
-msgstr "Dateien"
-
-#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:196
-msgid "Connecting to server failed. (Timed out.)"
-msgstr "Verbindung zum Server fehlgeschlagen. (Zeitüberschreitung)"
-
-#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:227
-msgid "Requesting the transmission..."
-msgstr "Übertragung wird angefragt …"
-
-#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:241
-#, c-format
-msgid "The hostname \"%s\" has not been accepted by the server."
-msgstr "Der Rechnername »%s« wurde vom Server nicht akzeptiert."
-
-#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:259
-#, c-format
-msgid "Calculating checksum for \"%s\"..."
-msgstr "Prüfsumme für »%s« wird berechnet …"
-
-#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:266
-msgid "Please accept the transmission-request on the other computer."
-msgstr "Bitte die Übertragungsanfrage am anderen Rechner annehmen."
-
-#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:274
-msgid "Starting the transmission..."
-msgstr "Die Übertragung wird gestartet …"
-
-#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:328
-msgid "hour(s)"
-msgstr "Stunde(n)"
-
-#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:328
-msgid "and"
-msgstr "und"
-
-#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:328
-#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:331
-msgid "minute(s)"
-msgstr "Minute(n)"
-
-#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:336
-#, c-format
-msgid "File %d of %d"
-msgstr "Datei %d von %d"
-
-#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:337
-#, c-format
-msgid "%0.2f %% sent. %s remaining (%s)."
-msgstr "%0.2f %% gesendet. %s verbleibend (%s)."
-
-#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:364
-#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:343
-msgid "Transmission completed."
-msgstr "Übertragung abgeschlossen."
-
-#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:364
-#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:343
-#, c-format
-msgid "%d file(s) had been transmitted."
-msgstr "%d Datei(en) wurden übertragen."
-
-#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:376
-msgid "The transmission was rejected by the other computer."
-msgstr "Die Übertragung wurde vom anderen Rechner zurückgewiesen."
-
-#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:383
-msgid "Protocol version not supported! Please try to update the client."
+#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/IncomingTransmission.vala:60
+msgid "Receiving initialisation failed."
 msgstr ""
-"Die Protokollversion wird nicht unterstützt! Bitte versuchen Sie das "
-"Programm zu aktualisieren."
 
-#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:390
-msgid "Connecting to server failed."
-msgstr "Verbindung zum Server fehlgeschlagen."
+#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/IncomingTransmission.vala:69
+msgid "Receiving request failed."
+msgstr ""
 
-#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:426
-#, c-format
-msgid "Failed to open file \"%s\": %s"
-msgstr "Öffnen der Datei »%s« ist fehlgeschlagen: %s"
+#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/IncomingTransmission.vala:90
+#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/IncomingTransmission.vala:115
+msgid "Sending confirmation failed."
+msgstr ""
 
-#: /home/marcus/Projekte/drop/po/../client/SendToDialog.vala:458
-#: /home/marcus/Projekte/drop/po/../server/File.vala:49
-#, c-format
-msgid "Failed to create the checksum for \"%s\"."
-msgstr "Erstellen der Prüfsummer für »%s« ist fehlgeschlagen."
+#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/OutgoingTransmission.vala:59
+msgid "Loading files failed."
+msgstr ""
 
-#: /home/marcus/Projekte/drop/po/../client/ConnectingPage.vala:82
-#, c-format
-msgid "Trying to connect to \"%s\"..."
-msgstr "Es wird versucht zu »%s« zu verbinden …"
+#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/OutgoingTransmission.vala:68
+msgid "Sending initialisation failed."
+msgstr ""
 
-#: /home/marcus/Projekte/drop/po/../client/FailurePage.vala:69
-msgid "Try again"
-msgstr "Erneut versuchen"
+#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/OutgoingTransmission.vala:77
+msgid "Sending request failed."
+msgstr ""
 
-#: /home/marcus/Projekte/drop/po/../client/FailurePage.vala:81
-msgid "Give up"
-msgstr "Aufgeben"
+#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/OutgoingTransmission.vala:86
+msgid "Receiving confirmation failed."
+msgstr ""
 
-#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:108
-#, c-format
-msgid "Request by %s."
-msgstr "Anfrage von %s."
-
-#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:123
-#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:163
-#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:331
-#, c-format
-msgid "Communication error: %s"
-msgstr "Kommunikationsfehler: %s"
-
-#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:137
-msgid "Select the folder for the received files"
-msgstr "Bitte den Ordner für die empfangenen Dateien auswählen"
-
-#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:139
-msgid "Start Transmission"
-msgstr "Übertragung starten"
-
-#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:184
-msgid "Protocol error: Too many transmission-requests."
-msgstr "Protokollfehler: Zu viele Übertragungsanfragen."
-
-#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:191
-msgid "Protocol error: Unknown hostname."
-msgstr "Protokollfehler: Unbekannter Rechnername."
-
-#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:221
-#, c-format
-msgid "Receiving file %d of %d by %s (%0.2f %%)."
-msgstr "Datei %d von %d von %s (%0.2f %%) wird empfangen."
-
-#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:232
-#, c-format
-msgid "IO error: Failed to write to \"%s\"."
-msgstr "EA-Fehler: Schreiben nach »%s« ist fehlgeschlagen."
-
-#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:242
-#, c-format
-msgid "Failed to write to \"%s\"."
-msgstr "Schreiben nach »%s« ist fehlgeschlagen."
-
-#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:268
-#, c-format
-msgid "IO error: Failed to move the file to \"%s\": %s"
-msgstr "EA-Fehler: Verschieben der Datei nach »%s« ist fehlgeschlagen: %s"
-
-#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:281
-#, c-format
-msgid "Failed to move the temporary file to \"%s\": %s"
-msgstr "Verschieben der temporären Datei nach »%s« ist fehlgeschlagen: %s"
-
-#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:302
-#, c-format
-msgid "Transmission error: Bad checksum of file \"%s\"."
-msgstr "Übertragungsfehler: Die Datei »%s« hat eine falsche Prüfsumme."
-
-#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:309
-msgid "Protocol error: Transmission not requested."
-msgstr "Protokollfehler: Die Übertragung wurde nicht angefragt."
-
-#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:346
-msgid "Transmission canceled."
-msgstr "Übertragung abgebrochen."
-
-#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:346
-msgid "Connection to the client closed."
-msgstr "Verbindung zum Programm getrennt."
-
-#: /home/marcus/Projekte/drop/po/../server/DropRequest.vala:350
-#, c-format
-msgid "Notification error: %s"
-msgstr "Benachrichtigungsfehler: %s"
-
-#: /home/marcus/Projekte/drop/po/../server/TransmissionDialog.vala:67
-#, c-format
-msgid "Transmission by %s"
-msgstr "Übertragung von %s"
-
-#: /home/marcus/Projekte/drop/po/../server/TransmissionDialog.vala:119
-msgid "Accept"
-msgstr "Annehmen"
-
-#: /home/marcus/Projekte/drop/po/../server/TransmissionDialog.vala:131
-msgid "Reject"
-msgstr "Ablehnen"
-
-#: /home/marcus/Projekte/drop/po/../server/Server.vala:119
-msgid "Accept connections"
-msgstr "Verbindungen annehmen"
+#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/OutgoingTransmission.vala:94
+msgid "Sending files failed."
+msgstr ""
