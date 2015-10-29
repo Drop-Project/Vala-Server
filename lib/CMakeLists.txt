@@ -33,3 +33,12 @@ install (FILES ${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}.pc DESTINATION ${CMAKE_IN
 install (FILES ${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}.vapi DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/vala/vapi/)
 install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/${LIB_NAME}.deps DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/vala/vapi/)
 install (FILES ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.h DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}/${LIB_NAME}/)
+
+# Include GObject Introspection
+include (FindGObjectIntrospection)
+
+# Try to generate an introspection file
+if (INTROSPECTION_FOUND)
+    include (GObjectIntrospectionMacros)
+    add_target_gir (${LIB_NAME} Drop ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.h "${LIB_CFLAGS}" ${LIB_VERSION} Gio-2.0 Gee-0.8)
+endif ()
