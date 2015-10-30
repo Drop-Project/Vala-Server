@@ -208,7 +208,7 @@ public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
                           (uint8)package[7];
 
             package.move (8, 0, package.length - 7);
-            string name = (string)package;
+            string name = ((string)package).replace ("..", "");
 
             debug ("File request received: #%u -> %s[%s Bytes]", id, name, size.to_string ());
 
