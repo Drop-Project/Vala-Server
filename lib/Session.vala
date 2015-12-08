@@ -53,11 +53,18 @@ public class Drop.Session : Object {
 
     private DaemonBus daemon_bus;
 
+    private Gee.HashMap<string, IncomingTransmission> incoming_transmissions;
+    private Gee.HashMap<string, OutgoingTransmission> outgoing_transmissions;
+
     /**
      * Creates a new Session.
      */
     public Session () {
+        incoming_transmissions = new Gee.HashMap<string, IncomingTransmission> ();
+        outgoing_transmissions = new Gee.HashMap<string, OutgoingTransmission> ();
+
         connect_dbus ();
+        load_transmissions ();
         connect_signals ();
     }
 
@@ -74,19 +81,19 @@ public class Drop.Session : Object {
     /**
      * Returns a list of the running incoming transmissions.
      *
-     * @return An array of dbus paths.
+     * @return An array of incoming transmissions.
      */
-    public string[] get_incoming_transmissions () throws IOError {
-        return daemon_bus.get_incoming_transmissions ();
+    public IncomingTransmission[] get_incoming_transmissions () throws IOError {
+        return incoming_transmissions.values.to_array ();
     }
 
     /**
      * Returns a list of the running outgoing transmissions.
      *
-     * @return An array of dbus paths.
+     * @return An array of outgoing transmissions.
      */
-    public string[] get_outgoing_transmissions () throws IOError {
-        return daemon_bus.get_outgoing_transmissions ();
+    public OutgoingTransmission[] get_outgoing_transmissions () throws IOError {
+        return outgoing_transmissions.values.to_array ();
     }
 
     /**
@@ -112,18 +119,44 @@ public class Drop.Session : Object {
 
     private void connect_signals () {
         daemon_bus.new_incoming_transmission.connect ((interface_path) => {
-            IncomingTransmission incoming_transmission = new IncomingTransmission (interface_path);
-
-            new_incoming_transmission (incoming_transmission);
+            register_incoming_transmission (interface_path);
         });
 
         daemon_bus.new_outgoing_transmission.connect ((interface_path) => {
-            OutgoingTransmission outgoing_transmission = new OutgoingTransmission (interface_path);
-
-            new_outgoing_transmission (outgoing_transmission);
+            register_outgoing_transmission (interface_path);
         });
 
         daemon_bus.transmission_partner_added.connect ((transmission_partner) => transmission_partner_added (transmission_partner));
         daemon_bus.transmission_partner_removed.connect ((name) => transmission_partner_removed (name));
+    }
+
+    private void load_transmissions () {
+        try {
+            foreach (string interface_path in daemon_bus.get_incoming_transmissions ()) {
+                register_incoming_transmission (interface_path);
+            }
+
+            foreach (string interface_path in daemon_bus.get_outgoing_transmissions ()) {
+                register_outgoing_transmission (interface_path);
+            }
+        } catch (Error e) {
+            warning ("Loading running transmissions failed: %s", e.message);
+        }
+    }
+
+    private void register_incoming_transmission (string interface_path) {
+        IncomingTransmission incoming_transmission = new IncomingTransmission (interface_path);
+
+        incoming_transmissions.@set (interface_path, incoming_transmission);
+
+        new_incoming_transmission (incoming_transmission);
+    }
+
+    private void register_outgoing_transmission (string interface_path) {
+        OutgoingTransmission outgoing_transmission = new OutgoingTransmission (interface_path);
+
+        outgoing_transmissions.@set (interface_path, outgoing_transmission);
+
+        new_outgoing_transmission (outgoing_transmission);
     }
 }
