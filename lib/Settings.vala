@@ -38,4 +38,12 @@ public class Drop.Settings : Granite.Services.Settings {
     public Settings () {
         base ("org.pantheon.drop.dropd");
     }
+
+    /**
+     * Returns the same value like server_name, but already checks,
+     * if it's empty and returns the hostname instead.
+     */
+    public string get_display_name () {
+        return (server_name.strip () == "" ? Environment.get_host_name () : server_name);
+    }
 }
