@@ -18,6 +18,10 @@
  */
 
 public class DropDialog.Application : Granite.Application {
+    static const OptionEntry[] option_entries = {
+        { null }
+    };
+
     construct {
         /* App-Properties */
         program_name = "Drop-Dialog";
@@ -41,6 +45,16 @@ public class DropDialog.Application : Granite.Application {
     }
 
     public override int command_line (ApplicationCommandLine command_line) {
+        this.hold ();
+
+        int res = process_command_line (command_line);
+
+        this.release ();
+
+        return res;
+    }
+
+    private int process_command_line (ApplicationCommandLine command_line) {
         if (this.get_windows () != null) {
             this.get_windows ().data.present ();
 
@@ -53,7 +67,21 @@ public class DropDialog.Application : Granite.Application {
             return 1;
         }
 
-        debug ("Starting drop dialog...");
+        OptionContext context = new OptionContext (null);
+        context.set_help_enabled (true);
+        context.add_main_entries (option_entries, "drop");
+        context.add_group (Gtk.get_option_group (true));
+
+        try {
+            string[] args = command_line.get_arguments ();
+            unowned string[] unparsed_args = args;
+
+            context.parse (ref unparsed_args);
+
+            /* TODO: The remaining unparsed arguments should be the file list. */
+        } catch (Error e) {
+            warning ("Parsing arguments failed: %s", e.message);
+        }
 
         MainWindow main_window = new MainWindow ();
         main_window.show_all ();
