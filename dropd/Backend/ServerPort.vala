@@ -17,7 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-public class dropd.Backend.ServerPort : Object {
+public class DropDaemon.Backend.ServerPort : Object {
     public uint16 port;
 
     public ServerPort (uint16 port) {

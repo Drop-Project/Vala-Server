@@ -29,6 +29,7 @@ list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 # Configuration files
 configure_file (${CMAKE_SOURCE_DIR}/dropd/config.vala.cmake ${CMAKE_SOURCE_DIR}/dropd/config.vala)
 configure_file (${CMAKE_SOURCE_DIR}/lib/drop.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/lib/${LIB_NAME}.pc)
+configure_file (${CMAKE_SOURCE_DIR}/drop-dialog/config.vala.cmake ${CMAKE_SOURCE_DIR}/drop-dialog/config.vala)
 
 # Check for vala
 find_package (Vala REQUIRED)
@@ -59,6 +60,7 @@ link_directories (${LIB_LIBRARY_DIRS})
 # Load directories
 add_subdirectory (dropd)
 add_subdirectory (lib)
+add_subdirectory (drop-dialog)
 add_subdirectory (po)
 add_subdirectory (data)
 add_subdirectory (schemas)

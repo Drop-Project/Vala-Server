@@ -17,5 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-public class DropDaemon.Backend.Utils : Object {
+public class DropDialog.MainWindow : Gtk.Dialog {
+    public MainWindow () {
+    }
 }

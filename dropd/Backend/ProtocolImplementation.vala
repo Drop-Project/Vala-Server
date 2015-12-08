@@ -17,7 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-public abstract class dropd.Backend.ProtocolImplementation : Object {
+public abstract class DropDaemon.Backend.ProtocolImplementation : Object {
     /* Packages bigger than 2^14 bytes are truncated by gio. */
     protected static const uint16 MAX_PACKAGE_LENGTH = 16384;
 

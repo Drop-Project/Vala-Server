@@ -18,7 +18,7 @@
  */
 
 [DBus (name = "org.dropd")]
-public class dropd.Backend.DBusInterface : Object {
+public class DropDaemon.Backend.DBusInterface : Object {
     public signal void new_incoming_transmission (string interface_path);
     public signal void new_outgoing_transmission (string interface_path);
     public signal void transmission_partner_added (ServiceBrowser.TransmissionPartner transmission_partner);

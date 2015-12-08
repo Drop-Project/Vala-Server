@@ -17,7 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-public class dropd.Application : Granite.Application {
+public class DropDaemon.Application : Granite.Application {
     /*
      * These constants should be kept up-to-date.
      *
@@ -67,7 +67,7 @@ public class dropd.Application : Granite.Application {
     }
 
     public Application () {
-        Object (application_id: "org.pantheon.drop", flags : ApplicationFlags.IS_SERVICE);
+        Object (application_id: "org.pantheon.drop.daemon", flags : ApplicationFlags.IS_SERVICE);
 
         /* Debug service */
         Granite.Services.Logger.initialize ("dropd");

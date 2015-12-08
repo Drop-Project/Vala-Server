@@ -18,7 +18,7 @@
  */
 
 [DBus (name = "org.dropd.IncomingTransmission")]
-public class dropd.Backend.IncomingTransmission : ProtocolImplementation {
+public class DropDaemon.Backend.IncomingTransmission : ProtocolImplementation {
     public enum ServerState {
         AWAITING_INITIALISATION,
         AWAITING_REQUEST,

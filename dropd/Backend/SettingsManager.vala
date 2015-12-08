@@ -17,7 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-public class dropd.Backend.SettingsManager : Granite.Services.Settings {
+public class DropDaemon.Backend.SettingsManager : Granite.Services.Settings {
     public string server_name { get; set; }
     public bool server_enabled { get; set; }
 

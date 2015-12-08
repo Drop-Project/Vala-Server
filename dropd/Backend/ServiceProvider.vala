@@ -17,7 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-public class dropd.Backend.ServiceProvider : Object {
+public class DropDaemon.Backend.ServiceProvider : Object {
     private static const string SERVICE_TYPE = "_drop._tcp";
 
     private static const string SERVICE_FIELD_PROTOCOL_VERSION = "protocol-version";

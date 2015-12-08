@@ -17,7 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-public class dropd.Backend.ServiceBrowser : Object {
+public class DropDaemon.Backend.ServiceBrowser : Object {
     public struct TransmissionPartner {
         string name;
         string hostname;

@@ -17,7 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-public class dropd.Backend.Server : ThreadedSocketService {
+public class DropDaemon.Backend.Server : ThreadedSocketService {
     private static const string CERT_PATH = config.PKGDATADIR + "/cert.pem";
     private static const string KEY_PATH = config.PKGDATADIR + "/key.pem";
 

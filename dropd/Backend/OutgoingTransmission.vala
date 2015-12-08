@@ -18,7 +18,7 @@
  */
 
 [DBus (name = "org.dropd.OutgoingTransmission")]
-public class dropd.Backend.OutgoingTransmission : ProtocolImplementation {
+public class DropDaemon.Backend.OutgoingTransmission : ProtocolImplementation {
     public enum ClientState {
         LOADING_FILES,
         SENDING_INITIALISATION,
