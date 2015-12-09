@@ -60,7 +60,19 @@ link_directories (${LIB_LIBRARY_DIRS})
 # Load directories
 add_subdirectory (dropd)
 add_subdirectory (lib)
-add_subdirectory (drop-dialog)
 add_subdirectory (po)
 add_subdirectory (data)
 add_subdirectory (schemas)
+
+# The following directories are depending on our own library
+include_directories (${CMAKE_BINARY_DIR}/lib)
+set (DEPS_LIBRARIES ${DEPS_LIBRARIES} ${LIB_NAME})
+
+# Check additional modules
+pkg_check_modules (DEPS REQUIRED drop-1.0)
+
+# Link additional dependencies
+link_libraries (${DEPS_LIBRARIES})
+
+# Load directories
+add_subdirectory (drop-dialog)

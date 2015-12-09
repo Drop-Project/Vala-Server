@@ -22,6 +22,10 @@ public class DropDialog.Application : Granite.Application {
         { null }
     };
 
+    private Gee.ArrayList<File> files;
+
+    private Gtk.Window? current_window = null;
+
     construct {
         /* App-Properties */
         program_name = "Drop-Dialog";
@@ -36,12 +40,14 @@ public class DropDialog.Application : Granite.Application {
     }
 
     public Application () {
-        Object (application_id: "org.pantheon.drop.dialog", flags : (ApplicationFlags.HANDLES_COMMAND_LINE |
-                                                                     ApplicationFlags.HANDLES_OPEN |
-                                                                     ApplicationFlags.NON_UNIQUE));
+        Object (application_id : "org.pantheon.drop.dialog", flags : (ApplicationFlags.HANDLES_COMMAND_LINE |
+                                                                      ApplicationFlags.HANDLES_OPEN |
+                                                                      ApplicationFlags.NON_UNIQUE));
 
         /* Debug service */
         Granite.Services.Logger.initialize ("drop-dialog");
+
+        files = new Gee.ArrayList<File> ();
     }
 
     public override int command_line (ApplicationCommandLine command_line) {
@@ -55,8 +61,8 @@ public class DropDialog.Application : Granite.Application {
     }
 
     private int process_command_line (ApplicationCommandLine command_line) {
-        if (this.get_windows () != null) {
-            this.get_windows ().data.present ();
+        if (current_window != null) {
+            current_window.present ();
 
             return 1;
         }
@@ -72,25 +78,78 @@ public class DropDialog.Application : Granite.Application {
         context.add_main_entries (option_entries, "drop");
         context.add_group (Gtk.get_option_group (true));
 
+        string[] args = command_line.get_arguments ();
+        unowned string[] unparsed_args = args;
+
         try {
-            string[] args = command_line.get_arguments ();
-            unowned string[] unparsed_args = args;
-
             context.parse (ref unparsed_args);
-
-            /* TODO: The remaining unparsed arguments should be the file list. */
         } catch (Error e) {
             warning ("Parsing arguments failed: %s", e.message);
+
+            return 1;
         }
 
-        MainWindow main_window = new MainWindow ();
-        main_window.show_all ();
+        if (unparsed_args.length > 1) {
+            for (int i = 1; i < unparsed_args.length; i++) {
+                File file = File.new_for_path (unparsed_args[i]);
 
-        this.add_window (main_window);
+                if (file.query_exists ()) {
+                    files.add (file);
+                } else {
+                    warning ("File %s doesn't exists.", unparsed_args[i]);
+                }
+            }
+
+            if (files.size == 0) {
+                return 1;
+            }
+
+            show_main_window ();
+        } else {
+            if (!show_file_chooser ()) {
+                return 1;
+            }
+        }
 
         Gtk.main ();
 
         return 0;
+    }
+
+    private bool show_file_chooser () {
+        Gtk.FileChooserDialog file_chooser = new Gtk.FileChooserDialog (_("Select the files you want to send…"),
+                                                                        null,
+                                                                        Gtk.FileChooserAction.OPEN,
+                                                                        _("Cancel"),
+                                                                        Gtk.ResponseType.CANCEL,
+                                                                        _("Open"),
+                                                                        Gtk.ResponseType.ACCEPT);
+        file_chooser.select_multiple = true;
+
+        current_window = file_chooser;
+
+        if (file_chooser.run () == Gtk.ResponseType.ACCEPT) {
+            file_chooser.close ();
+
+            foreach (File file in file_chooser.get_files ()) {
+                files.add (file);
+            }
+
+            show_main_window ();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private void show_main_window () {
+        MainWindow main_window = new MainWindow (files);
+        main_window.destroy.connect (Gtk.main_quit);
+        main_window.show_all ();
+
+        current_window = main_window;
+        this.add_window (main_window);
     }
 
     public static int main (string[] args) {

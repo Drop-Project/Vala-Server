@@ -18,6 +18,13 @@
  */
 
 public class DropDialog.MainWindow : Gtk.Dialog {
-    public MainWindow () {
+    public Gee.ArrayList<File> files { private get; construct; }
+
+    private Drop.Session drop_session;
+
+    public MainWindow (Gee.ArrayList<File> files) {
+        Object (files: files);
+
+        drop_session = new Drop.Session ();
     }
 }
