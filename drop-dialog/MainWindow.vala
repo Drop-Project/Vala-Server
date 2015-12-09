@@ -22,9 +22,26 @@ public class DropDialog.MainWindow : Gtk.Dialog {
 
     private Drop.Session drop_session;
 
+    private Gtk.Grid main_grid;
+
+    private Gtk.Label header_label;
+
     public MainWindow (Gee.ArrayList<File> files) {
         Object (files: files);
 
         drop_session = new Drop.Session ();
+
+        build_ui ();
+    }
+
+    private void build_ui () {
+        main_grid = new Gtk.Grid ();
+
+        header_label = new Gtk.Label (_("Send %i files…").printf (files.size));
+        header_label.get_style_context ().add_class (Granite.StyleClass.H2_TEXT);
+
+        main_grid.attach (header_label, 0, 0, 1, 1);
+
+        this.get_content_area ().add (main_grid);
     }
 }
