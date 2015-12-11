@@ -22,7 +22,7 @@ public class DropDialog.Application : Granite.Application {
         { null }
     };
 
-    private Gee.ArrayList<File> files;
+    private Gee.ArrayList<string> filenames;
 
     private Gtk.Window? current_window = null;
 
@@ -47,7 +47,7 @@ public class DropDialog.Application : Granite.Application {
         /* Debug service */
         Granite.Services.Logger.initialize ("drop-dialog");
 
-        files = new Gee.ArrayList<File> ();
+        filenames = new Gee.ArrayList<string> ();
     }
 
     public override int command_line (ApplicationCommandLine command_line) {
@@ -94,29 +94,25 @@ public class DropDialog.Application : Granite.Application {
                 File file = File.new_for_path (unparsed_args[i]);
 
                 if (file.query_exists ()) {
-                    files.add (file);
+                    filenames.add (file.get_path ());
                 } else {
                     warning ("File %s doesn't exists.", unparsed_args[i]);
                 }
             }
 
-            if (files.size == 0) {
+            if (filenames.size == 0) {
                 return 1;
             }
 
             show_main_window ();
         } else {
-            if (!show_file_chooser ()) {
-                return 1;
-            }
+            show_file_chooser ();
         }
-
-        Gtk.main ();
 
         return 0;
     }
 
-    private bool show_file_chooser () {
+    private void show_file_chooser () {
         Gtk.FileChooserDialog file_chooser = new Gtk.FileChooserDialog (_("Select the files you want to send…"),
                                                                         null,
                                                                         Gtk.FileChooserAction.OPEN,
@@ -129,27 +125,30 @@ public class DropDialog.Application : Granite.Application {
         current_window = file_chooser;
 
         if (file_chooser.run () == Gtk.ResponseType.ACCEPT) {
-            file_chooser.close ();
-
             foreach (File file in file_chooser.get_files ()) {
-                files.add (file);
+                filenames.add (file.get_path ());
             }
 
+            file_chooser.destroy ();
             show_main_window ();
 
-            return true;
+            return;
         }
-
-        return false;
     }
 
     private void show_main_window () {
-        MainWindow main_window = new MainWindow (files);
-        main_window.destroy.connect (Gtk.main_quit);
+        MainWindow main_window = new MainWindow (filenames);
+
         main_window.show_all ();
+        main_window.destroy.connect (() => {
+            Gtk.main_quit ();
+        });
 
         current_window = main_window;
+
         this.add_window (main_window);
+
+        Gtk.main ();
     }
 
     public static int main (string[] args) {

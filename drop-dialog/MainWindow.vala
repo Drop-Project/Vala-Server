@@ -18,7 +18,7 @@
  */
 
 public class DropDialog.MainWindow : Gtk.Dialog {
-    public Gee.ArrayList<File> files { private get; construct; }
+    public Gee.ArrayList<string> filenames { private get; construct; }
 
     private Drop.Session drop_session;
 
@@ -27,33 +27,92 @@ public class DropDialog.MainWindow : Gtk.Dialog {
     private Gtk.Label header_label;
     private Drop.Widgets.PartnerList partner_list;
 
-    public MainWindow (Gee.ArrayList<File> files) {
-        Object (files: files);
+    private Gtk.Button close_button;
+    private Gtk.Button send_button;
+
+    public MainWindow (Gee.ArrayList<string> filenames) {
+        Object (filenames: filenames);
 
         drop_session = new Drop.Session ();
 
         build_ui ();
+        connect_signals ();
     }
 
     private void build_ui () {
+        this.set_default_size (550, 350);
         this.deletable = false;
 
         main_grid = new Gtk.Grid ();
-        main_grid.margin = 12;
-        main_grid.margin_top = 0;
-        main_grid.row_spacing = 12;
-        main_grid.column_spacing = 12;
+        main_grid.margin_start = 12;
+        main_grid.margin_end = 12;
+        main_grid.margin_bottom = 12;
+        main_grid.row_spacing = 18;
 
-        header_label = new Gtk.Label (ngettext ("Send %i file…", "Send %i files…", files.size).printf (files.size));
+        header_label = new Gtk.Label (ngettext ("Send %i file to…", "Send %i files to…", filenames.size).printf (filenames.size));
         header_label.get_style_context ().add_class (Granite.StyleClass.H2_TEXT);
         header_label.halign = Gtk.Align.START;
 
-        partner_list = new Drop.Widgets.PartnerList (drop_session, true);
+        partner_list = new Drop.Widgets.PartnerList (drop_session, false);
         partner_list.expand = true;
 
         main_grid.attach (header_label, 0, 0, 1, 1);
         main_grid.attach (partner_list, 0, 1, 1, 1);
 
+        close_button = (Gtk.Button) this.add_button (_("Close"), Gtk.ResponseType.CLOSE);
+
+        send_button = (Gtk.Button) this.add_button (_("Send"), Gtk.ResponseType.ACCEPT);
+        send_button.get_style_context ().add_class (Gtk.STYLE_CLASS_SUGGESTED_ACTION);
+        send_button.sensitive = false;
+
         this.get_content_area ().add (main_grid);
+        this.get_action_area ().margin = 6;
+    }
+
+    private void connect_signals () {
+        partner_list.entries_changed.connect (() => {
+            bool partners_selected = false;
+
+            foreach (Drop.Widgets.PartnerListEntry entry in partner_list.get_entry_rows ().values) {
+                if (entry.selected) {
+                    partners_selected = true;
+
+                    break;
+                }
+            }
+
+            send_button.set_sensitive (partners_selected);
+        });
+
+        this.response.connect ((response_id) => {
+            if (response_id == Gtk.ResponseType.ACCEPT) {
+                if (!start_transmissions ()) {
+                    return;
+                }
+            }
+
+            this.destroy ();
+        });
+    }
+
+    private bool start_transmissions () {
+        try {
+            foreach (Drop.Widgets.PartnerListEntry entry in partner_list.get_entry_rows ().values) {
+                if (entry.selected) {
+                    drop_session.start_transmission (entry.transmission_partner.hostname,
+                                                     entry.use_encryption ? entry.transmission_partner.port : entry.transmission_partner.unencrypted_port,
+                                                     filenames.to_array (),
+                                                     entry.use_encryption);
+
+                    break;
+                }
+            }
+        } catch (Error e) {
+            warning ("Starting transmissions failed: %s", e.message);
+
+            return false;
+        }
+
+        return true;
     }
 }

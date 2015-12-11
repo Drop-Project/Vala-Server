@@ -63,7 +63,7 @@ public class Drop.Widgets.PartnerList : Gtk.Frame {
      *
      * @return A read-only view of the shown rows.
      */
-    public Map<string, PartnerListEntry> get_entries () {
+    public Gee.Map<string, PartnerListEntry> get_entry_rows () {
         return entries.read_only_view;
     }
 
@@ -85,16 +85,6 @@ public class Drop.Widgets.PartnerList : Gtk.Frame {
     private void list_transmission_partners () {
         try {
             foreach (TransmissionPartner transmission_partner in session.get_transmission_partners (show_myself)) {
-                add_transmission_partner (transmission_partner);
-                add_transmission_partner (transmission_partner);
-                add_transmission_partner (transmission_partner);
-                add_transmission_partner (transmission_partner);
-                add_transmission_partner (transmission_partner);
-                add_transmission_partner (transmission_partner);
-                add_transmission_partner (transmission_partner);
-                add_transmission_partner (transmission_partner);
-                add_transmission_partner (transmission_partner);
-                add_transmission_partner (transmission_partner);
                 add_transmission_partner (transmission_partner);
             }
         } catch (Error e) {

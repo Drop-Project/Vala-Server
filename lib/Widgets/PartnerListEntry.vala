@@ -93,6 +93,7 @@ public class Drop.Widgets.PartnerListEntry : Gtk.Grid {
 
         encryption_button = new Gtk.ToggleButton ();
         encryption_button.image = new Gtk.Image.from_icon_name (use_encryption ? "security-high-symbolic" : "security-low-symbolic", Gtk.IconSize.BUTTON);
+        encryption_button.tooltip_text = _("Use a secure encryption for this transmission");
         encryption_button.active = use_encryption;
         encryption_button.sensitive = encryption_optional;
 
