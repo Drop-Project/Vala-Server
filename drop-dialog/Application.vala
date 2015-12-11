@@ -18,9 +18,12 @@
  */
 
 public class DropDialog.Application : Granite.Application {
-    static const OptionEntry[] option_entries = {
+    private static const OptionEntry[] option_entries = {
+        { "show-myself", 'm', 0, OptionArg.NONE, ref show_myself, "List own drop server", null },
         { null }
     };
+
+    private static bool show_myself = false;
 
     private Gee.ArrayList<string> filenames;
 
@@ -137,7 +140,7 @@ public class DropDialog.Application : Granite.Application {
     }
 
     private void show_main_window () {
-        MainWindow main_window = new MainWindow (filenames);
+        MainWindow main_window = new MainWindow (filenames, show_myself);
 
         main_window.show_all ();
         main_window.destroy.connect (() => {

@@ -19,6 +19,7 @@
 
 public class DropDialog.MainWindow : Gtk.Dialog {
     public Gee.ArrayList<string> filenames { private get; construct; }
+    public bool show_myself { private get; construct; }
 
     private Drop.Session drop_session;
 
@@ -30,8 +31,8 @@ public class DropDialog.MainWindow : Gtk.Dialog {
     private Gtk.Button close_button;
     private Gtk.Button send_button;
 
-    public MainWindow (Gee.ArrayList<string> filenames) {
-        Object (filenames: filenames);
+    public MainWindow (Gee.ArrayList<string> filenames, bool show_myself) {
+        Object (filenames: filenames, show_myself: show_myself);
 
         drop_session = new Drop.Session ();
 
@@ -53,7 +54,7 @@ public class DropDialog.MainWindow : Gtk.Dialog {
         header_label.get_style_context ().add_class (Granite.StyleClass.H2_TEXT);
         header_label.halign = Gtk.Align.START;
 
-        partner_list = new Drop.Widgets.PartnerList (drop_session, false);
+        partner_list = new Drop.Widgets.PartnerList (drop_session, show_myself);
         partner_list.expand = true;
 
         main_grid.attach (header_label, 0, 0, 1, 1);
