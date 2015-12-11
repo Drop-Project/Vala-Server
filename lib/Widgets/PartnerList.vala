@@ -76,7 +76,7 @@ public class Drop.Widgets.PartnerList : Gtk.Frame {
         stack = new Gtk.Stack ();
 
         alert_view = new Granite.Widgets.AlertView (_("No transmission partners detected"),
-                                                    _("Please check if the devices you want to send files to are active or enter the hostname manually."),
+                                                    _("Please check if the devices you want to send files to are running and their servers are enabled."),
                                                     "dialog-information");
 
         stack.add_named (alert_view, "alert");
