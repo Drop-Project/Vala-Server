@@ -25,6 +25,7 @@ public class DropDialog.MainWindow : Gtk.Dialog {
     private Gtk.Grid main_grid;
 
     private Gtk.Label header_label;
+    private Drop.Widgets.PartnerList partner_list;
 
     public MainWindow (Gee.ArrayList<File> files) {
         Object (files: files);
@@ -35,12 +36,23 @@ public class DropDialog.MainWindow : Gtk.Dialog {
     }
 
     private void build_ui () {
-        main_grid = new Gtk.Grid ();
+        this.deletable = false;
 
-        header_label = new Gtk.Label (_("Send %i files…").printf (files.size));
+        main_grid = new Gtk.Grid ();
+        main_grid.margin = 12;
+        main_grid.margin_top = 0;
+        main_grid.row_spacing = 12;
+        main_grid.column_spacing = 12;
+
+        header_label = new Gtk.Label (ngettext ("Send %i file…", "Send %i files…", files.size).printf (files.size));
         header_label.get_style_context ().add_class (Granite.StyleClass.H2_TEXT);
+        header_label.halign = Gtk.Align.START;
+
+        partner_list = new Drop.Widgets.PartnerList (drop_session, true);
+        partner_list.expand = true;
 
         main_grid.attach (header_label, 0, 0, 1, 1);
+        main_grid.attach (partner_list, 0, 1, 1, 1);
 
         this.get_content_area ().add (main_grid);
     }
