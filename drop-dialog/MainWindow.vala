@@ -41,7 +41,7 @@ public class DropDialog.MainWindow : Gtk.Dialog {
     }
 
     private void build_ui () {
-        this.set_default_size (550, 350);
+        this.set_default_size (750, 450);
         this.deletable = false;
 
         main_grid = new Gtk.Grid ();

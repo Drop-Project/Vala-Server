@@ -33,6 +33,10 @@ public class Drop.Widgets.PartnerList : Gtk.Frame {
 
     private Gee.HashMap<string, PartnerListEntry> entries { get; private set; }
 
+    private Gtk.Stack stack;
+
+    private Granite.Widgets.AlertView alert_view;
+
     private Gtk.ScrolledWindow scrolled_window;
     private Gtk.Box entry_list;
 
@@ -55,6 +59,7 @@ public class Drop.Widgets.PartnerList : Gtk.Frame {
 
         build_ui ();
         list_transmission_partners ();
+        update_view ();
         connect_signals ();
     }
 
@@ -68,7 +73,13 @@ public class Drop.Widgets.PartnerList : Gtk.Frame {
     }
 
     private void build_ui () {
-        this.set_size_request (-1, 100);
+        stack = new Gtk.Stack ();
+
+        alert_view = new Granite.Widgets.AlertView (_("No transmission partners detected"),
+                                                    _("Please check if the devices you want to send files to are active or enter the hostname manually."),
+                                                    "dialog-information");
+
+        stack.add_named (alert_view, "alert");
 
         scrolled_window = new Gtk.ScrolledWindow (null, null);
         scrolled_window.hscrollbar_policy = Gtk.PolicyType.NEVER;
@@ -79,7 +90,9 @@ public class Drop.Widgets.PartnerList : Gtk.Frame {
 
         scrolled_window.add (entry_list);
 
-        this.add (scrolled_window);
+        stack.add_named (scrolled_window, "list");
+
+        this.add (stack);
     }
 
     private void list_transmission_partners () {
@@ -102,6 +115,8 @@ public class Drop.Widgets.PartnerList : Gtk.Frame {
             return;
         }
 
+        remove_transmission_partner (transmission_partner.name);
+
         PartnerListEntry entry = new PartnerListEntry (transmission_partner);
         entry.selection_toggled.connect (() => {
             entries_changed ();
@@ -114,6 +129,7 @@ public class Drop.Widgets.PartnerList : Gtk.Frame {
         entries.@set (transmission_partner.name, entry);
 
         entries_changed ();
+        update_view ();
     }
 
     private void remove_transmission_partner (string name) {
@@ -127,5 +143,15 @@ public class Drop.Widgets.PartnerList : Gtk.Frame {
         entries.unset (name);
 
         entries_changed ();
+        update_view ();
+    }
+
+    private void update_view () {
+        if (entries.is_empty) {
+            stack.set_visible_child_name ("alert");
+        } else {
+            stack.set_visible_child_name ("list");
+            scrolled_window.show_all ();
+        }
     }
 }
