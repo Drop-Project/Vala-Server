@@ -7,4 +7,5 @@ add_translations_catalog ("drop"
     ../dropd
     ../dropd/Backend
     ../lib
+    ../drop-dialog
 )
