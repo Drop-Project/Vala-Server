@@ -102,7 +102,7 @@ public class DropDaemon.Backend.ServiceProvider : Object {
 
     private string get_display_name () {
         if (settings_manager.server_name.strip () == "") {
-            return "%s@%s".printf (Environment.get_user_name (), Environment.get_host_name ());
+            return Environment.get_user_name ();
         } else {
             return settings_manager.server_name;
         }

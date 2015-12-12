@@ -47,7 +47,7 @@ public class Drop.Settings : Granite.Services.Settings {
      */
     public string get_display_name () {
         if (server_name.strip () == "") {
-            return "%s@%s".printf (Environment.get_user_name (), Environment.get_host_name ());
+            return Environment.get_user_name ();
         } else {
             return server_name;
         }
