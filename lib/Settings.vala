@@ -43,9 +43,13 @@ public class Drop.Settings : Granite.Services.Settings {
 
     /**
      * Returns the same value like server_name, but already checks,
-     * if it's empty and returns the hostname instead.
+     * if it's empty and returns the user- and hostname instead.
      */
     public string get_display_name () {
-        return (server_name.strip () == "" ? Environment.get_host_name () : server_name);
+        if (server_name.strip () == "") {
+            return "%s@%s".printf (Environment.get_user_name (), Environment.get_host_name ());
+        } else {
+            return server_name;
+        }
     }
 }
