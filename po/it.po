@@ -1,0 +1,95 @@
+# Italian translation for drop
+# Copyright (c) 2015 Rosetta Contributors and Canonical Ltd 2015
+# This file is distributed under the same license as the drop package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: drop\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2015-12-12 15:01+0100\n"
+"PO-Revision-Date: 2015-12-13 08:16+0000\n"
+"Last-Translator: Fabio Zaramella <FFabio.96.X@Gmail.com>\n"
+"Language-Team: Italian <it@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Launchpad-Export-Date: 2015-12-14 05:35+0000\n"
+"X-Generator: Launchpad (build 17865)\n"
+
+#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/IncomingTransmission.vala:62
+msgid "Receiving initialisation failed."
+msgstr "Inizializzazione ricezione non riuscita."
+
+#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/IncomingTransmission.vala:71
+msgid "Receiving request failed."
+msgstr "Richiesta ricezione non riuscita."
+
+#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/IncomingTransmission.vala:92
+#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/IncomingTransmission.vala:117
+msgid "Sending confirmation failed."
+msgstr "Invio di conferma non riuscito."
+
+#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/OutgoingTransmission.vala:61
+msgid "Loading files failed."
+msgstr "Caricamento dei file non riuscito."
+
+#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/OutgoingTransmission.vala:70
+msgid "Sending initialisation failed."
+msgstr "Invio di inizializzazione non riuscito."
+
+#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/OutgoingTransmission.vala:79
+msgid "Sending request failed."
+msgstr "Invio richiesta non riuscito."
+
+#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/OutgoingTransmission.vala:88
+msgid "Receiving confirmation failed."
+msgstr "Conferma ricezione non riuscita."
+
+#: /home/marcus/Vala-Projekte/drop/po/../dropd/Backend/OutgoingTransmission.vala:96
+msgid "Sending files failed."
+msgstr "Invio dei file non riuscito."
+
+#: /home/marcus/Vala-Projekte/drop/po/../lib/Widgets/PartnerList.vala:80
+msgid "No transmission partners detected"
+msgstr "Nessun partner di trasmissione rilevato"
+
+#: /home/marcus/Vala-Projekte/drop/po/../lib/Widgets/PartnerList.vala:81
+msgid ""
+"Please check if the devices you want to send files to are running and their "
+"servers are enabled."
+msgstr ""
+"Per favore verifica se i dispositivi a cui si desidera inviare i file sono "
+"in esecuzione e se i loro servizi sono abilitati."
+
+#: /home/marcus/Vala-Projekte/drop/po/../lib/Widgets/PartnerListEntry.vala:98
+msgid "Use a secure encryption for this transmission"
+msgstr "Utilizza una crittografia sicura per questa trasmissione"
+
+#: /home/marcus/Vala-Projekte/drop/po/../drop-dialog/Application.vala:121
+msgid "Select the files you want to send…"
+msgstr "Seleziona i file che desideri inviare..."
+
+#: /home/marcus/Vala-Projekte/drop/po/../drop-dialog/Application.vala:124
+msgid "Cancel"
+msgstr "Annulla"
+
+#: /home/marcus/Vala-Projekte/drop/po/../drop-dialog/Application.vala:126
+msgid "Open"
+msgstr "Apri"
+
+#: /home/marcus/Vala-Projekte/drop/po/../drop-dialog/MainWindow.vala:55
+#, c-format
+msgid "Send %i file to…"
+msgid_plural "Send %i files to…"
+msgstr[0] "Invia %i file a..."
+msgstr[1] "Invia %i file a..."
+
+#: /home/marcus/Vala-Projekte/drop/po/../drop-dialog/MainWindow.vala:65
+msgid "Close"
+msgstr "Chiudi"
+
+#: /home/marcus/Vala-Projekte/drop/po/../drop-dialog/MainWindow.vala:67
+msgid "Send"
+msgstr "Invia"
