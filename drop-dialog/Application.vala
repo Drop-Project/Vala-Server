@@ -20,12 +20,12 @@
  */
 
 public class DropDialog.Application : Granite.Application {
-    private static const OptionEntry[] option_entries = {
-        { "show-myself", 'm', 0, OptionArg.NONE, ref show_myself, "List own drop server", null },
+    private static const OptionEntry[] OPTIONS = {
+        { "show-myself", 'm', 0, OptionArg.NONE, null, "List own drop server", null },
         { null }
     };
 
-    private static bool show_myself = false;
+    private bool show_myself = false;
 
     private Gee.ArrayList<string> filenames;
 
@@ -33,6 +33,8 @@ public class DropDialog.Application : Granite.Application {
 
     construct {
         /* App-Properties */
+        application_id = "org.pantheon.drop.dialog";
+        flags = (ApplicationFlags.HANDLES_COMMAND_LINE | ApplicationFlags.HANDLES_OPEN | ApplicationFlags.NON_UNIQUE);
         program_name = "Drop-Dialog";
         exec_name = "drop-dialog";
 
@@ -42,20 +44,18 @@ public class DropDialog.Application : Granite.Application {
         build_release_name = config.RELEASE_NAME;
         build_version = config.VERSION;
         build_version_info = config.VERSION_INFO;
+
+        add_main_option_entries (OPTIONS);
     }
 
     public Application () {
-        Object (application_id : "org.pantheon.drop.dialog", flags : (ApplicationFlags.HANDLES_COMMAND_LINE |
-                                                                      ApplicationFlags.HANDLES_OPEN |
-                                                                      ApplicationFlags.NON_UNIQUE));
-
         /* Debug service */
         Granite.Services.Logger.initialize ("drop-dialog");
 
         filenames = new Gee.ArrayList<string> ();
     }
 
-    public override int command_line (ApplicationCommandLine command_line) {
+    protected override int command_line (ApplicationCommandLine command_line) {
         this.hold ();
 
         int res = process_command_line (command_line);
@@ -78,30 +78,22 @@ public class DropDialog.Application : Granite.Application {
             return 1;
         }
 
-        OptionContext context = new OptionContext (null);
-        context.set_help_enabled (true);
-        context.add_main_entries (option_entries, "drop");
-        context.add_group (Gtk.get_option_group (true));
+        VariantDict options = command_line.get_options_dict ();
 
-        string[] args = command_line.get_arguments ();
-        unowned string[] unparsed_args = args;
-
-        try {
-            context.parse (ref unparsed_args);
-        } catch (Error e) {
-            warning ("Parsing arguments failed: %s", e.message);
-
-            return 1;
+        if (options.contains ("show-myself")) {
+            show_myself = true;
         }
 
-        if (unparsed_args.length > 1) {
-            for (int i = 1; i < unparsed_args.length; i++) {
-                File file = File.new_for_path (unparsed_args[i]);
+        string[] args = command_line.get_arguments ();
+
+        if (args.length > 1) {
+            for (int i = 1; i < args.length; i++) {
+                File file = File.new_for_path (args[i]);
 
                 if (file.query_exists ()) {
                     filenames.add (file.get_path ());
                 } else {
-                    warning ("File %s doesn't exists.", unparsed_args[i]);
+                    warning ("File %s doesn't exists.", args[i]);
                 }
             }
 

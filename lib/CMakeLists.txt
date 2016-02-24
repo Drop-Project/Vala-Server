@@ -14,6 +14,7 @@ OPTIONS
     --thread
     --vapidir=${CMAKE_SOURCE_DIR}/vapi
     --target-glib 2.32
+    --vapi-comments
 GENERATE_VAPI
     ${LIB_NAME}
 GENERATE_HEADER

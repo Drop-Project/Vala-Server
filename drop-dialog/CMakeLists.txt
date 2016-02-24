@@ -11,6 +11,7 @@ PACKAGES
 OPTIONS
     --thread
     --vapidir=${CMAKE_SOURCE_DIR}/vapi
+    --vapidir=${CMAKE_CURRENT_BINARY_DIR}/../lib
     --target-glib 2.32
 )
 
