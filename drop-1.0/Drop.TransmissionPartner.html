@@ -51,6 +51,9 @@
 
         <h2 class="main_title">Description:</h2>
         <div class="main_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">struct</span> <b><span class="struct">TransmissionPartner</span></b>
+        </div>
+        <div class="description">
+          <p>Represents a transmission partner you can connect to.</p>
         </div><br/>
         <div class="namespace_note"><b>Namespace:</b> <a href="Drop.html">Drop</a>
         </div>
@@ -61,35 +64,36 @@
         <ul class="navi_inline">
           <li class="field"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="class">string</span></span> <b><a href="Drop.TransmissionPartner.name.html" class="field">name</a></b>
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">The name of the transmission partner, acting as an ID.</span>
             </div></li>
           <li class="field"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="class">string</span></span> <b><a href="Drop.TransmissionPartner.hostname.html" class="field">hostname</a></b>
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">The hostname of the computer.</span>
             </div></li>
           <li class="field"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">uint16</span></span> <b><a href="Drop.TransmissionPartner.port.html" class="field">port</a></b>
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">The port of the service. This port requires a TLS handshake.</span>
             </div></li>
           <li class="field"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">uint16</span></span> <b><a href="Drop.TransmissionPartner.unencrypted_port.html" class="field">unencrypted_port</a></b>
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">The unencrypted port of the service. This port doesn't allow TLS, make
+                sure that the user does not send critical files using this port.</span>
             </div></li>
           <li class="field"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="Drop.TransmissionPartner.protocol_version.html" class="field">protocol_version</a></b>
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">The version of the protocol the server uses.</span>
             </div></li>
           <li class="field"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="class">string</span></span> <b><a href="Drop.TransmissionPartner.protocol_implementation.html" class="field">protocol_implementation</a></b>
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">The name of the server's protocol implementation.</span>
             </div></li>
           <li class="field"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="class">string</span></span> <b><a href="Drop.TransmissionPartner.display_name.html" class="field">display_name</a></b>
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">The server-name that should be displayed to the user.</span>
             </div></li>
           <li class="field"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">bool</span></span> <b><a href="Drop.TransmissionPartner.server_enabled.html" class="field">server_enabled</a></b>
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">If true, the server is running and accepts transmissions.</span>
             </div></li>
         </ul>
       </div>

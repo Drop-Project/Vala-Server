@@ -45,6 +45,9 @@
 
         <h2 class="main_title">Description:</h2>
         <div class="main_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">class</span> <b><span class="class">Settings</span></b> : <span class="main_type"><span class="abstract_class">Settings</span></span>
+        </div>
+        <div class="description">
+          <p>This class provides access to the configuration of the drop daemon.</p>
         </div><br/>
         <div class="namespace_note"><b>Namespace:</b> <a href="Drop.html">Drop</a>
         </div>
@@ -55,25 +58,28 @@
         <ul class="navi_inline">
           <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="class">string</span></span> <b><a href="Drop.Settings.server_name.html" class="property">server_name</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">The name of the server that's displayed to the user. Leave this empty 
+                to use the device's hostname.</span>
             </div></li>
           <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">bool</span></span> <b><a href="Drop.Settings.server_enabled.html" class="property">server_enabled</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">Sets wether the server is enabled and should receive transmissions.
+              </span>
             </div></li>
         </ul>
         <h3 class="main_title">Creation methods:</h3>
         <ul class="navi_inline">
           <li class="creation_method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <b><a href="Drop.Settings.Settings.html" class="creation_method">Settings</a></b> ()
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">Creates a new Settings interface.</span>
             </div></li>
         </ul>
         <h3 class="main_title">Methods:</h3>
         <ul class="navi_inline">
           <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="class">string</span></span> <b><a href="Drop.Settings.get_display_name.html" class="method">get_display_name</a></b> ()
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">Returns the same value like server_name, but already checks, if it's 
+                empty and returns the user- and hostname instead.</span>
             </div></li>
         </ul>
         <h3 class="main_title">Inherited Members:</h3>

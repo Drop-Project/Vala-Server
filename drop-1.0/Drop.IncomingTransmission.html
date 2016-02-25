@@ -52,11 +52,14 @@
       
 
       <map id="Drop.IncomingTransmission" name="Drop.IncomingTransmission">
-<area shape="rect" id="node1" href="Drop.IncomingTransmission.html" title="Drop.IncomingTransmission" alt="" coords="5,101,237,149"/>
+<area shape="rect" id="node1" href="Drop.IncomingTransmission.html" title="Drop.IncomingTransmission" alt="" coords="5,101,236,149"/>
 </map>
 
         <h2 class="main_title">Description:</h2>
         <div class="main_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">class</span> <b><span class="class">IncomingTransmission</span></b> : <span class="main_type"><span class="class">Object</span></span>
+        </div>
+        <div class="description">
+          <p>This class represents an incoming transmission used to receive files that were sent to you.</p>
         </div><br/>
         <div class="namespace_note"><b>Namespace:</b> <a href="Drop.html">Drop</a>
         </div>
@@ -67,68 +70,69 @@
         <ul class="navi_inline">
           <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="class">string</span></span> <b><a href="Drop.IncomingTransmission.interface_path.html" class="property">interface_path</a></b> { <span class="main_keyword">construct</span>; <span class="main_keyword">get</span>; }
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">The dbus-path of the current transmission.</span>
             </div></li>
         </ul>
         <h3 class="main_title">Creation methods:</h3>
         <ul class="navi_inline">
           <li class="creation_method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <b><a href="Drop.IncomingTransmission.IncomingTransmission.html" class="creation_method">IncomingTransmission</a></b> (<span class="main_basic_type"><span class="class">string</span></span> interface_path)
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">Creates a new interface for the dbus-interface of an incoming 
+                transmission.</span>
             </div></li>
         </ul>
         <h3 class="main_title">Methods:</h3>
         <ul class="navi_inline">
           <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="Drop.IncomingFileRequest.html" class="struct">IncomingFileRequest</a></span>[] <b><a href="Drop.IncomingTransmission.get_file_requests.html" class="method">get_file_requests</a></b> () <span class="main_keyword">throws</span> <span class="main_type"><span class="errordomain">IOError</span></span>
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">Lists the requested files for the transmission.</span>
             </div></li>
           <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="Drop.IncomingTransmission.reject_transmission.html" class="method">reject_transmission</a></b> () <span class="main_keyword">throws</span> <span class="main_type"><span class="errordomain">IOError</span></span>
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">Rejects the whole transmission.</span>
             </div></li>
           <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="Drop.IncomingTransmission.accept_transmission.html" class="method">accept_transmission</a></b> (<span class="main_basic_type"><span class="struct">uint16</span></span>[] ids) <span class="main_keyword">throws</span> <span class="main_type"><span class="errordomain">IOError</span></span>
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">Accepts the transmission.</span>
             </div></li>
           <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="Drop.IncomingTransmission.cancel.html" class="method">cancel</a></b> () <span class="main_keyword">throws</span> <span class="main_type"><span class="errordomain">IOError</span></span>
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">Cancels the transmission.</span>
             </div></li>
           <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">bool</span></span> <b><a href="Drop.IncomingTransmission.get_is_secure.html" class="method">get_is_secure</a></b> () <span class="main_keyword">throws</span> <span class="main_type"><span class="errordomain">IOError</span></span>
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">Returns if the current connection is encrypted.</span>
             </div></li>
           <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="Drop.ServerState.html" class="enum">ServerState</a></span> <b><a href="Drop.IncomingTransmission.get_state.html" class="method">get_state</a></b> () <span class="main_keyword">throws</span> <span class="main_type"><span class="errordomain">IOError</span></span>
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">Returns the current protocol state.</span>
             </div></li>
           <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">uint8</span></span> <b><a href="Drop.IncomingTransmission.get_client_version.html" class="method">get_client_version</a></b> () <span class="main_keyword">throws</span> <span class="main_type"><span class="errordomain">IOError</span></span>
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">Returns the used protocol version of the connected client.</span>
             </div></li>
           <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="class">string</span></span> <b><a href="Drop.IncomingTransmission.get_client_name.html" class="method">get_client_name</a></b> () <span class="main_keyword">throws</span> <span class="main_type"><span class="errordomain">IOError</span></span>
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">Returns the display name of the connected client.</span>
             </div></li>
         </ul>
         <h3 class="main_title">Signals:</h3>
         <ul class="navi_inline">
           <li class="signal"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">signal</span> <span class="main_keyword">void</span> <b><a href="Drop.IncomingTransmission.protocol_failed.html" class="signal">protocol_failed</a></b> (<span class="main_basic_type"><span class="class">string</span></span> error_message)
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">Is called when an error in the protocol implementation occours.</span>
             </div></li>
           <li class="signal"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">signal</span> <span class="main_keyword">void</span> <b><a href="Drop.IncomingTransmission.state_changed.html" class="signal">state_changed</a></b> (<span class="main_type"><a href="Drop.ServerState.html" class="enum">ServerState</a></span> state)
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">Is called when the state of the transmission changes.</span>
             </div></li>
           <li class="signal"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">signal</span> <span class="main_keyword">void</span> <b><a href="Drop.IncomingTransmission.progress_changed.html" class="signal">progress_changed</a></b> (<span class="main_basic_type"><span class="struct">uint64</span></span> bytes_received, <span class="main_basic_type"><span class="struct">uint64</span></span> total_size)
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">Is called when the receiving progress of the files updates.</span>
             </div></li>
           <li class="signal"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">signal</span> <span class="main_keyword">void</span> <b><a href="Drop.IncomingTransmission.file_received.html" class="signal">file_received</a></b> (<span class="main_basic_type"><span class="struct">uint</span></span> id, <span class="main_basic_type"><span class="class">string</span></span> filename)
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">Is called when a file has been received.</span>
             </div></li>
         </ul>
         <h3 class="main_title">Inherited Members:</h3>

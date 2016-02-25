@@ -45,11 +45,15 @@
         <img class="main_diagram" usemap="#Drop.Session" alt="Object hierarchy for Session" src="img/Drop.Session.png"/>
 
       <map id="Drop.Session" name="Drop.Session">
-<area shape="rect" id="node1" href="Drop.Session.html" title="Drop.Session" alt="" coords="5,101,123,149"/>
+<area shape="rect" id="node1" href="Drop.Session.html" title="Drop.Session" alt="" coords="5,101,124,149"/>
 </map>
 
         <h2 class="main_title">Description:</h2>
         <div class="main_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">class</span> <b><span class="class">Session</span></b> : <span class="main_type"><span class="class">Object</span></span>
+        </div>
+        <div class="description">
+          <p>This class represents a connection to the daemon to access information about running transmissions, start new transmissions and and list 
+            available transmission partners.</p>
         </div><br/>
         <div class="namespace_note"><b>Namespace:</b> <a href="Drop.html">Drop</a>
         </div>
@@ -60,45 +64,45 @@
         <ul class="navi_inline">
           <li class="creation_method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <b><a href="Drop.Session.Session.html" class="creation_method">Session</a></b> ()
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">Creates a new Session.</span>
             </div></li>
         </ul>
         <h3 class="main_title">Methods:</h3>
         <ul class="navi_inline">
           <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="Drop.TransmissionPartner.html" class="struct">TransmissionPartner</a></span>[] <b><a href="Drop.Session.get_transmission_partners.html" class="method">get_transmission_partners</a></b> (<span class="main_basic_type"><span class="struct">bool</span></span> show_myself) <span class="main_keyword">throws</span> <span class="main_type"><span class="errordomain">IOError</span></span>
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">Returns a list of the available transmission partners.</span>
             </div></li>
           <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="Drop.IncomingTransmission.html" class="class">IncomingTransmission</a></span>[] <b><a href="Drop.Session.get_incoming_transmissions.html" class="method">get_incoming_transmissions</a></b> () <span class="main_keyword">throws</span> <span class="main_type"><span class="errordomain">IOError</span></span>
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">Returns a list of the running incoming transmissions.</span>
             </div></li>
           <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="Drop.OutgoingTransmission.html" class="class">OutgoingTransmission</a></span>[] <b><a href="Drop.Session.get_outgoing_transmissions.html" class="method">get_outgoing_transmissions</a></b> () <span class="main_keyword">throws</span> <span class="main_type"><span class="errordomain">IOError</span></span>
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">Returns a list of the running outgoing transmissions.</span>
             </div></li>
           <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="class">string</span></span> <b><a href="Drop.Session.start_transmission.html" class="method">start_transmission</a></b> (<span class="main_basic_type"><span class="class">string</span></span> hostname, <span class="main_basic_type"><span class="struct">uint16</span></span> port, <span class="main_basic_type"><span class="class">string</span></span>[] filenames, <span class="main_basic_type"><span class="struct">bool</span></span> use_tls = <span class="main_optional_parameter">true</span>) <span class="main_keyword">throws</span> <span class="main_type"><span class="errordomain">IOError</span></span>
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">Starts a new outgoing transmisson.</span>
             </div></li>
         </ul>
         <h3 class="main_title">Signals:</h3>
         <ul class="navi_inline">
           <li class="signal"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">signal</span> <span class="main_keyword">void</span> <b><a href="Drop.Session.new_incoming_transmission.html" class="signal">new_incoming_transmission</a></b> (<span class="main_type"><a href="Drop.IncomingTransmission.html" class="class">IncomingTransmission</a></span> incoming_transmission)
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">Is called when a new incoming transmission has been detected.</span>
             </div></li>
           <li class="signal"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">signal</span> <span class="main_keyword">void</span> <b><a href="Drop.Session.new_outgoing_transmission.html" class="signal">new_outgoing_transmission</a></b> (<span class="main_type"><a href="Drop.OutgoingTransmission.html" class="class">OutgoingTransmission</a></span> outgoing_transmission)
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">Is called when a new outgoing transmission has been started.</span>
             </div></li>
           <li class="signal"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">signal</span> <span class="main_keyword">void</span> <b><a href="Drop.Session.transmission_partner_added.html" class="signal">transmission_partner_added</a></b> (<span class="main_type"><a href="Drop.TransmissionPartner.html" class="struct">TransmissionPartner</a></span> transmission_partner)
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">Is called when a new transmission partner has been detected.</span>
             </div></li>
           <li class="signal"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">signal</span> <span class="main_keyword">void</span> <b><a href="Drop.Session.transmission_partner_removed.html" class="signal">transmission_partner_removed</a></b> (<span class="main_basic_type"><span class="class">string</span></span> name)
             </span>
-            <div class="leaf_brief_description">
+            <div class="leaf_brief_description"><span class="brief_description">Is called when a transmission partner has disappeared.</span>
             </div></li>
         </ul>
         <h3 class="main_title">Inherited Members:</h3>
