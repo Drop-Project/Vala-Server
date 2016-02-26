@@ -25,7 +25,7 @@
 public class Drop.Settings : Granite.Services.Settings {
     /**
      * The name of the server that's displayed to the user.
-     * Leave this empty to use the device's hostname.
+     * Leave this empty to use the real user name.
      */
     public string server_name { get; set; }
 
@@ -43,7 +43,7 @@ public class Drop.Settings : Granite.Services.Settings {
 
     /**
      * Returns the same value like server_name, but already checks,
-     * if it's empty and returns the user- and hostname instead.
+     * if it's empty and returns the real user name instead.
      */
     public string get_display_name () {
         if (server_name.strip () == "") {
