@@ -96,7 +96,7 @@ public class DropDaemon.Backend.DBusInterface : Object {
                     debug ("Connection established.");
 
                     OutgoingTransmission protocol_implementation = new OutgoingTransmission (connection,
-                                                                                             settings_manager.server_name.strip () == "" ? Environment.get_host_name () : settings_manager.server_name,
+                                                                                             settings_manager.get_display_name (),
                                                                                              files,
                                                                                              require_tls);
 

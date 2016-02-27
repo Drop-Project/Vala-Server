@@ -64,7 +64,7 @@ public class DropDaemon.Backend.ServiceProvider : Object {
                         set_service_field (SERVICE_FIELD_PROTOCOL_VERSION, Application.PROTOCOL_VERSION.to_string ());
                         set_service_field (SERVICE_FIELD_PROTOCOL_IMPLEMENTATION, Application.PROTOCOL_IMPLEMENTATION);
                         set_service_field (SERVICE_FIELD_UNENCRYPTED_PORT, Application.UNENCRYPTED_PORT.to_string ());
-                        set_service_field (SERVICE_FIELD_DISPLAY_NAME, get_display_name ());
+                        set_service_field (SERVICE_FIELD_DISPLAY_NAME, settings_manager.get_display_name ());
                         set_service_field (SERVICE_FIELD_SERVER_ENABLED, settings_manager.server_enabled.to_string ());
                         entry_group.commit ();
                     } catch (Error e) {
@@ -80,7 +80,7 @@ public class DropDaemon.Backend.ServiceProvider : Object {
         });
 
         settings_manager.notify["server-name"].connect (() => {
-            set_service_field (SERVICE_FIELD_DISPLAY_NAME, get_display_name ());
+            set_service_field (SERVICE_FIELD_DISPLAY_NAME, settings_manager.get_display_name ());
         });
 
         settings_manager.notify["server-enabled"].connect (() => {
@@ -97,14 +97,6 @@ public class DropDaemon.Backend.ServiceProvider : Object {
             service.set (field, value);
         } catch (Error e) {
             warning ("Writing to service configuration failed: %s", e.message);
-        }
-    }
-
-    private string get_display_name () {
-        if (settings_manager.server_name.strip () == "") {
-            return Environment.get_real_name ();
-        } else {
-            return settings_manager.server_name;
         }
     }
 }

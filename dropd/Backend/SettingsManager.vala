@@ -26,4 +26,12 @@ public class DropDaemon.Backend.SettingsManager : Granite.Services.Settings {
     public SettingsManager () {
         base ("org.pantheon.drop.dropd");
     }
+
+    public string get_display_name () {
+        if (server_name.strip () == "") {
+            return Environment.get_real_name ();
+        } else {
+            return server_name;
+        }
+    }
 }
