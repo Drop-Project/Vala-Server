@@ -7,6 +7,11 @@ vala_precompile (LIB_VALA_C
     Settings.vala
     Widgets/PartnerList.vala
     Widgets/PartnerListEntry.vala
+    Widgets/IncomingTransmissionList.vala
+    Widgets/OutgoingTransmissionList.vala
+    Widgets/TransmissionListEntry.vala
+    Widgets/IncomingTransmissionListEntry.vala
+    Widgets/OutgoingTransmissionListEntry.vala
 PACKAGES
     gio-2.0
     granite

@@ -67,6 +67,9 @@ namespace Drop {
         bool server_enabled;
     }
 
+    /**
+     * Represents a file request of an incoming transmission.
+     */
     public struct IncomingFileRequest {
         /**
          * The id of the file.
