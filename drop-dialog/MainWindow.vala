@@ -106,8 +106,6 @@ public class DropDialog.MainWindow : Gtk.Dialog {
                                                      entry.use_encryption ? entry.transmission_partner.port : entry.transmission_partner.unencrypted_port,
                                                      filenames.to_array (),
                                                      entry.use_encryption);
-
-                    break;
                 }
             }
         } catch (Error e) {
