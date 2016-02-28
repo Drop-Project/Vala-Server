@@ -10,5 +10,8 @@ make
 sudo make install
 ```
 
+## Certificate
+Until now it's required to generate the TLS certificate used by the server manually by executing the following commands:
+
 ## Execution
 To run the daemon on your pc type `dropd` or `dropd -d` for further debugging output. The sending dialog can be opened by executing `drop-dialog`.
