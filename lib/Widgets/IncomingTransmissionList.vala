@@ -101,7 +101,8 @@ public class Drop.Widgets.IncomingTransmissionList : Gtk.Box {
         }
 
         this.add (entry);
-
+        this.show_all ();
+        
         transmission_count++;
         transmission_added (transmission);
     }

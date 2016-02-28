@@ -57,6 +57,7 @@ public class Drop.Widgets.TransmissionListEntry : Gtk.Grid {
 
         secondary_label = new Gtk.Label ("");
         secondary_label.halign = Gtk.Align.START;
+        secondary_label.hexpand = true;
 
         progress_revealer = new Gtk.Revealer ();
         progress_revealer.reveal_child = false;
@@ -67,8 +68,6 @@ public class Drop.Widgets.TransmissionListEntry : Gtk.Grid {
         progress_revealer.add (progress_bar);
 
         action_area = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
-
-        action_area.hexpand = true;
         action_area.valign = Gtk.Align.END;
 
         this.attach (icon, 0, 0, 1, 3);
@@ -76,6 +75,7 @@ public class Drop.Widgets.TransmissionListEntry : Gtk.Grid {
         this.attach (secondary_label, 1, 1, 1, 1);
         this.attach (progress_revealer, 1, 2, 1, 1);
         this.attach (action_area, 2, 0, 1, 3);
+        this.show_all ();
     }
 
     /**

@@ -27,7 +27,7 @@ public class Drop.Widgets.IncomingTransmissionListEntry : TransmissionListEntry 
     /**
      * The transmission the entry is built on.
      */
-    public IncomingTransmission transmission { get; construct; }
+    public IncomingTransmission transmission { get; private set; }
 
     private Gtk.Button accept_button;
     private Gtk.Button reject_button;
@@ -40,7 +40,7 @@ public class Drop.Widgets.IncomingTransmissionListEntry : TransmissionListEntry 
      * @param transmission Transmission to build the entry on.
      */
     public IncomingTransmissionListEntry (IncomingTransmission transmission) {
-        Object (transmission: transmission);
+        this.transmission = transmission;
 
         build_ui ();
         read_state ();
@@ -91,8 +91,7 @@ public class Drop.Widgets.IncomingTransmissionListEntry : TransmissionListEntry 
         reject_button.clicked.connect (() => {
             try {
                 transmission.reject_transmission ();
-
-                accept_button.set_visible (false);
+                this.destroy ();
             } catch (Error e) {
                 stderr.printf ("Could not reject transmition: %s", e.message);
             }
@@ -101,6 +100,7 @@ public class Drop.Widgets.IncomingTransmissionListEntry : TransmissionListEntry 
         cancel_button.clicked.connect (() => {
             try {
                 transmission.cancel ();
+                this.destroy ();
             } catch (Error e) {
                 stderr.printf ("Could not cancel transmition: %s", e.message);
             }
