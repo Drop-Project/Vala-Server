@@ -8,7 +8,7 @@ Reference implementation of the Drop protocol for Linux. This repository contain
 * libgranite-dev
 * libgee-0.8-dev
 * libavahi-gobject-dev
-* libavahi-client-dev`
+* libavahi-client-dev
 
 ## Installation
 ```
