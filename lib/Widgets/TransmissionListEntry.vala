@@ -54,7 +54,7 @@ public class Drop.Widgets.TransmissionListEntry : Gtk.Grid {
         primary_label.halign = Gtk.Align.START;
         primary_label.ellipsize = Pango.EllipsizeMode.MIDDLE;
         primary_label.get_style_context ().add_class (Granite.StyleClass.H3_TEXT);
-        
+
         secondary_label = new Gtk.Label ("");
         secondary_label.halign = Gtk.Align.START;
         secondary_label.hexpand = true;
