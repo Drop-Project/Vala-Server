@@ -15,3 +15,7 @@ Until now it's required to generate the TLS certificate used by the server manua
 
 ## Execution
 To run the daemon on your pc type `dropd` or `dropd -d` for further debugging output. The sending dialog can be opened by executing `drop-dialog`.
+
+## Library documentation
+This server ships a library that handles the whole communication part between your integration and the Drop daemon. You can browse it's documentation here:
+[http://drop-project.github.io/Vala-Server](http://drop-project.github.io/Vala-Server/drop-1.0/index.htm)
