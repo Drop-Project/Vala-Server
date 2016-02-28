@@ -41,7 +41,7 @@ public class Drop.Widgets.TransmissionListEntry : Gtk.Grid {
      * Creates a new transmission entry and it's ui.
      */
     public TransmissionListEntry () {
-        this.build_ui ();
+        build_ui ();
     }
 
     private void build_ui () {
