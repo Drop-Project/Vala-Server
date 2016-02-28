@@ -1,6 +1,15 @@
 # Vala-Server
 Reference implementation of the Drop protocol for Linux. This repository contains a daemon (dropd), a library (libdrop-1.0) for easier communication via DBus and a simple user-interface (drop-dialog) for sending files to another device.
 
+## Dependencies
+* cmake
+* valac
+* libgtk-3-dev
+* libgranite-dev
+* libgee-0.8-dev
+* libavahi-gobject-dev
+* libavahi-client-dev`
+
 ## Installation
 ```
 mkdir build
