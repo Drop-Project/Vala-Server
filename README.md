@@ -11,7 +11,7 @@ sudo make install
 ```
 
 ## Certificate
-Until now it's required to generate the TLS certificate used by the server manually by executing the following commands:
+Until now it's required to generate the TLS certificate used by the server manually by executing `sudo openssl req -nodes -new -x509 -keyout /usr/share/drop/key.pem -out /usr/share/drop/cert.pem -days 365`
 
 ## Execution
 To run the daemon on your pc type `dropd` or `dropd -d` for further debugging output. The sending dialog can be opened by executing `drop-dialog`.
