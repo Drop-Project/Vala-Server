@@ -37,7 +37,6 @@ public class Drop.Widgets.OutgoingTransmissionListEntry : TransmissionListEntry 
      * @param transmission Transmission to build the entry on.
      */
     public OutgoingTransmissionListEntry (OutgoingTransmission transmission) {
-        base ();
         this.transmission = transmission;
 
         build_ui ();
@@ -49,6 +48,7 @@ public class Drop.Widgets.OutgoingTransmissionListEntry : TransmissionListEntry 
     private void build_ui () {
         cancel_button = new Gtk.Button.from_icon_name ("process-stop-symbolic", Gtk.IconSize.BUTTON);
         cancel_button.valign = Gtk.Align.CENTER;
+        
         action_area.add (cancel_button);
     }
 
@@ -116,7 +116,9 @@ public class Drop.Widgets.OutgoingTransmissionListEntry : TransmissionListEntry 
 
             if (files.length == 0) {
                 warning ("File list invalid.");
+                
                 this.destroy ();
+                
                 return;
             }
 

@@ -41,11 +41,10 @@ public class Drop.Widgets.TransmissionListEntry : Gtk.Grid {
      * Creates a new transmission entry and it's ui.
      */
     public TransmissionListEntry () {
-        this.build ();
+        this.build_ui ();
     }
 
-    private void build () {
-        debug ("Building Transmission UI\n");
+    private void build_ui () {
         this.column_spacing = 6;
         this.row_spacing = 6;
 
@@ -55,9 +54,10 @@ public class Drop.Widgets.TransmissionListEntry : Gtk.Grid {
         primary_label.halign = Gtk.Align.START;
         primary_label.ellipsize = Pango.EllipsizeMode.MIDDLE;
         primary_label.get_style_context ().add_class (Granite.StyleClass.H3_TEXT);
-
+        
         secondary_label = new Gtk.Label ("");
         secondary_label.halign = Gtk.Align.START;
+        secondary_label.hexpand = true;
 
         progress_revealer = new Gtk.Revealer ();
         progress_revealer.reveal_child = false;
@@ -68,8 +68,6 @@ public class Drop.Widgets.TransmissionListEntry : Gtk.Grid {
         progress_revealer.add (progress_bar);
 
         action_area = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
-
-        action_area.hexpand = true;
         action_area.valign = Gtk.Align.END;
 
         this.attach (icon, 0, 0, 1, 3);

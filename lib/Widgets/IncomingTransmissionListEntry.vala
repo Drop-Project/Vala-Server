@@ -40,8 +40,6 @@ public class Drop.Widgets.IncomingTransmissionListEntry : TransmissionListEntry 
      * @param transmission Transmission to build the entry on.
      */
     public IncomingTransmissionListEntry (IncomingTransmission transmission) {
-        base ();
-
         this.transmission = transmission;
 
         build_ui ();
