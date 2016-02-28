@@ -41,10 +41,11 @@ public class Drop.Widgets.TransmissionListEntry : Gtk.Grid {
      * Creates a new transmission entry and it's ui.
      */
     public TransmissionListEntry () {
-        build_ui ();
+        this.build ();
     }
 
-    private void build_ui () {
+    private void build () {
+        debug ("Building Transmission UI\n");
         this.column_spacing = 6;
         this.row_spacing = 6;
 
@@ -76,6 +77,7 @@ public class Drop.Widgets.TransmissionListEntry : Gtk.Grid {
         this.attach (secondary_label, 1, 1, 1, 1);
         this.attach (progress_revealer, 1, 2, 1, 1);
         this.attach (action_area, 2, 0, 1, 3);
+        this.show_all ();
     }
 
     /**

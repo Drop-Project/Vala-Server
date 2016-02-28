@@ -27,7 +27,7 @@ public class Drop.Widgets.OutgoingTransmissionListEntry : TransmissionListEntry 
     /**
      * The transmission the entry is built on.
      */
-    public OutgoingTransmission transmission { get; construct; }
+    public OutgoingTransmission transmission { get; private set; }
 
     private Gtk.Button cancel_button;
 
@@ -37,9 +37,11 @@ public class Drop.Widgets.OutgoingTransmissionListEntry : TransmissionListEntry 
      * @param transmission Transmission to build the entry on.
      */
     public OutgoingTransmissionListEntry (OutgoingTransmission transmission) {
-        Object (transmission: transmission);
+        base ();
+        this.transmission = transmission;
 
         build_ui ();
+        display_sending_initialisation ();
         read_state ();
         connect_signals ();
     }
@@ -47,6 +49,7 @@ public class Drop.Widgets.OutgoingTransmissionListEntry : TransmissionListEntry 
     private void build_ui () {
         cancel_button = new Gtk.Button.from_icon_name ("process-stop-symbolic", Gtk.IconSize.BUTTON);
         cancel_button.valign = Gtk.Align.CENTER;
+        action_area.add (cancel_button);
     }
 
     private void read_state () {
@@ -64,6 +67,7 @@ public class Drop.Widgets.OutgoingTransmissionListEntry : TransmissionListEntry 
         cancel_button.clicked.connect (() => {
             try {
                 transmission.cancel ();
+                this.destroy ();
             } catch (Error e) {
                 stderr.printf ("Could not cancel transmition: %s", e.message);
             }
@@ -112,9 +116,7 @@ public class Drop.Widgets.OutgoingTransmissionListEntry : TransmissionListEntry 
 
             if (files.length == 0) {
                 warning ("File list invalid.");
-
                 this.destroy ();
-
                 return;
             }
 
