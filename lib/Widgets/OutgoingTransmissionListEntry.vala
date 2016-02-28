@@ -116,9 +116,9 @@ public class Drop.Widgets.OutgoingTransmissionListEntry : TransmissionListEntry 
 
             if (files.length == 0) {
                 warning ("File list invalid.");
-                
+
                 this.destroy ();
-                
+
                 return;
             }
 
