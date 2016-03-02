@@ -28,3 +28,6 @@ To run the daemon on your pc type `dropd` or `dropd -d` for further debugging ou
 ## Library documentation
 This server ships a library that handles the whole communication part between your integration and the Drop daemon. You can browse it's documentation here:
 [http://drop-project.github.io/Vala-Server](http://drop-project.github.io/Vala-Server/drop-1.0/index.htm)
+
+## Translations
+Please help us translating this project! [https://translations.launchpad.net/drop](https://translations.launchpad.net/drop)
