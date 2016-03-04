@@ -26,14 +26,18 @@ public class DropDaemon.Backend.Server : ThreadedSocketService {
     public signal void new_transmission_interface_registered (string interface_path);
     public signal void transmission_interface_removed (string interface_path);
 
+    private SettingsManager settings_manager;
+
     private DBusConnection dbus_connection;
 
     private TlsCertificate? server_certificate = null;
 
     private uint transmission_counter = 0;
 
-    public Server () {
+    public Server (SettingsManager settings_manager) {
         Object (max_threads : -1);
+
+        this.settings_manager = settings_manager;
 
         Bus.own_name (BusType.SESSION, "org.dropd.IncomingTransmission", BusNameOwnerFlags.NONE, (dbus_connection) => {
             this.dbus_connection = dbus_connection;
@@ -94,9 +98,9 @@ public class DropDaemon.Backend.Server : ThreadedSocketService {
 
                     debug ("Connection established.");
 
-                    protocol_implementation = new IncomingTransmission (tls_connection, true);
+                    protocol_implementation = new IncomingTransmission (tls_connection, settings_manager.get_display_name (), true);
                 } else {
-                    protocol_implementation = new IncomingTransmission (connection, false);
+                    protocol_implementation = new IncomingTransmission (connection, settings_manager.get_display_name (), false);
                 }
 
                 string interface_path = "/org/dropd/IncomingTransmission%u".printf (transmission_counter++);

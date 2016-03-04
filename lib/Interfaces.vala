@@ -127,6 +127,7 @@ namespace Drop {
      */
     public enum ServerState {
         AWAITING_INITIALISATION,
+        SENDING_INITIALISATION,
         AWAITING_REQUEST,
         NEEDS_CONFIRMATION,
         SENDING_CONFIRMATION,
@@ -143,6 +144,7 @@ namespace Drop {
     public enum ClientState {
         LOADING_FILES,
         SENDING_INITIALISATION,
+        AWAITING_INITIALISATION,
         SENDING_REQUEST,
         AWAITING_CONFIRMATION,
         REJECTED,

@@ -91,7 +91,7 @@ public class DropDaemon.Application : Granite.Application {
         settings_manager = new Backend.SettingsManager ();
         service_provider = new Backend.ServiceProvider (client, settings_manager);
         service_browser = new Backend.ServiceBrowser (client);
-        server = new Backend.Server ();
+        server = new Backend.Server (settings_manager);
         dbus_interface = new Backend.DBusInterface (server, settings_manager, service_browser);
 
         try {
