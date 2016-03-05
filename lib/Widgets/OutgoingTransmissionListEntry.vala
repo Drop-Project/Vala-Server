@@ -30,6 +30,7 @@ public class Drop.Widgets.OutgoingTransmissionListEntry : TransmissionListEntry 
     public OutgoingTransmission transmission { get; private set; }
 
     private Gtk.Button cancel_button;
+    private Gtk.Button stop_button;
 
     /**
      * Creates a new outgoing transmission entry.
@@ -46,10 +47,14 @@ public class Drop.Widgets.OutgoingTransmissionListEntry : TransmissionListEntry 
     }
 
     private void build_ui () {
-        cancel_button = new Gtk.Button.from_icon_name ("process-stop-symbolic", Gtk.IconSize.BUTTON);
+        cancel_button = new Gtk.Button.with_label (_("Cancel"));
         cancel_button.valign = Gtk.Align.CENTER;
         
+        stop_button = new Gtk.Button.from_icon_name ("process-stop-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+        stop_button.valign = Gtk.Align.CENTER;
+
         action_area.add (cancel_button);
+        action_area.show_all ();
     }
 
     private void read_state () {
@@ -64,14 +69,18 @@ public class Drop.Widgets.OutgoingTransmissionListEntry : TransmissionListEntry 
         transmission.state_changed.connect (display_state);
         transmission.progress_changed.connect (display_progress);
 
-        cancel_button.clicked.connect (() => {
-            try {
-                transmission.cancel ();
-                this.destroy ();
-            } catch (Error e) {
-                stderr.printf ("Could not cancel transmition: %s", e.message);
-            }
-        });
+        cancel_button.clicked.connect (cancel);
+
+        stop_button.clicked.connect (cancel);
+    }
+
+    private void cancel () {
+        try {
+            transmission.cancel ();
+            this.destroy ();
+        } catch (Error e) {
+            stderr.printf ("Could not cancel transmition: %s", e.message);
+        }
     }
 
     private void display_state (ClientState state) {
@@ -123,14 +132,14 @@ public class Drop.Widgets.OutgoingTransmissionListEntry : TransmissionListEntry 
             }
 
             if (files.length == 1) {
-                set_primary_label (files[0].name);
+                set_primary_label (_("Sending %s to %s").printf (files[0].name, "Felipe Escoto"));
                 set_icon_for_file_name (files[0].name);
             } else {
-                set_primary_label ("%d files".printf (files.length));
+                set_primary_label (_("Sending %d files to %s").printf (files.length, "Felipe Escoto"));
                 set_icon_from_icon_name ("network-workgroup");
             }
 
-            set_secondary_label ("Sending initialisation…");
+            set_secondary_label (_("Sending initialisation…"));
         } catch (Error e) {
             warning ("Reading file request failed: %s", e.message);
         }
@@ -146,11 +155,15 @@ public class Drop.Widgets.OutgoingTransmissionListEntry : TransmissionListEntry 
 
     private void display_rejected () {
         set_secondary_label (_("Transmission rejected"));
+
+        swap_buttons ();
     }
 
     private void display_sending_data () {
         set_secondary_label (_("Sending files…"));
         set_progress_visible (true);
+
+        swap_buttons ();
     }
 
     private void display_finished () {
@@ -166,6 +179,12 @@ public class Drop.Widgets.OutgoingTransmissionListEntry : TransmissionListEntry 
     private void display_failure () {
         set_secondary_label (_("Failed"));
         set_progress_visible (false);
+    }
+
+    private void swap_buttons () {
+        action_area.remove (cancel_button);
+        action_area.add (stop_button);
+        action_area.show_all ();
     }
 
     private void display_progress (uint64 bytes_sent, uint64 total_size) {

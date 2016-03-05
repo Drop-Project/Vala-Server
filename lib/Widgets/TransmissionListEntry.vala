@@ -23,7 +23,7 @@
 /**
  * The backbone of the transmission widgets.
  */
-public class Drop.Widgets.TransmissionListEntry : Gtk.Grid {
+public class Drop.Widgets.TransmissionListEntry : Gtk.Box {
     /**
      * The action area that can be used to add widgets to control the transmission.
      */
@@ -31,7 +31,10 @@ public class Drop.Widgets.TransmissionListEntry : Gtk.Grid {
 
     private Gtk.Image icon;
 
+    private Gtk.Grid main_grid;
+
     private Gtk.Label primary_label;
+    private Gtk.Label middle_label;
     private Gtk.Label secondary_label;
 
     private Gtk.Revealer progress_revealer;
@@ -45,36 +48,44 @@ public class Drop.Widgets.TransmissionListEntry : Gtk.Grid {
     }
 
     private void build_ui () {
-        this.column_spacing = 6;
-        this.row_spacing = 6;
+        this.orientation = Gtk.Orientation.HORIZONTAL;
+        this.spacing = 12;
+
+        main_grid = new Gtk.Grid ();
+        main_grid.column_spacing = 12;
+        main_grid.row_spacing = 2;
 
         icon = new Gtk.Image ();
 
         primary_label = new Gtk.Label ("");
         primary_label.halign = Gtk.Align.START;
+        primary_label.valign = Gtk.Align.END;
         primary_label.ellipsize = Pango.EllipsizeMode.MIDDLE;
-        primary_label.get_style_context ().add_class (Granite.StyleClass.H3_TEXT);
+        primary_label.use_markup = true;
 
         secondary_label = new Gtk.Label ("");
         secondary_label.halign = Gtk.Align.START;
+        secondary_label.valign = Gtk.Align.START;
         secondary_label.hexpand = true;
 
         progress_revealer = new Gtk.Revealer ();
-        progress_revealer.reveal_child = false;
         progress_revealer.transition_type = Gtk.RevealerTransitionType.SLIDE_DOWN;
 
         progress_bar = new Gtk.ProgressBar ();
+        progress_bar.valign = Gtk.Align.CENTER;
 
         progress_revealer.add (progress_bar);
 
-        action_area = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
-        action_area.valign = Gtk.Align.END;
+        action_area = new Gtk.Box (Gtk.Orientation.VERTICAL, 4);
+        action_area.valign = Gtk.Align.CENTER;
 
-        this.attach (icon, 0, 0, 1, 3);
-        this.attach (primary_label, 1, 0, 1, 1);
-        this.attach (secondary_label, 1, 1, 1, 1);
-        this.attach (progress_revealer, 1, 2, 1, 1);
-        this.attach (action_area, 2, 0, 1, 3);
+        main_grid.attach (icon, 0, 0, 1, 4);
+        main_grid.attach (primary_label, 1, 1, 1, 1);
+        main_grid.attach (progress_revealer, 1, 2, 1, 1);
+        main_grid.attach (secondary_label, 1, 3, 1, 1);
+
+        this.add (main_grid);
+        this.add (action_area);
         this.show_all ();
     }
 
@@ -102,7 +113,7 @@ public class Drop.Widgets.TransmissionListEntry : Gtk.Grid {
      * @param text Text to set.
      */
     protected void set_primary_label (string text) {
-        primary_label.set_label (text);
+        primary_label.set_label ("<b>" + text + "</b>");
     }
 
     /**
