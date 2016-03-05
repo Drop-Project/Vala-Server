@@ -87,13 +87,13 @@ public class Drop.Widgets.IncomingTransmissionList : Gtk.Box {
         entry.margin = 6;
 
         entry.destroy.connect (() => {
-            transmission_removed (transmission);
-
             if (separator != null) {
                 this.remove (separator);
             }
 
             transmission_count--;
+
+            transmission_removed (transmission);
         });
 
         if (transmission_count > 0) {
@@ -104,6 +104,11 @@ public class Drop.Widgets.IncomingTransmissionList : Gtk.Box {
         this.show_all ();
         
         transmission_count++;
-        transmission_added (transmission);
+
+        transmission.state_changed.connect ((state) => {
+            if (state == ServerState.AWAITING_REQUEST) {
+                transmission_added (transmission);
+            }
+        });
     }
 }
