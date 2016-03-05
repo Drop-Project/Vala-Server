@@ -107,6 +107,24 @@ public class Drop.OutgoingTransmission : Object {
         return transmission_bus.get_state ();
     }
 
+    /**
+     * Returns the used protocol version of the connected server.
+     *
+     * @return The protocol version.
+     */
+    public uint8 get_server_version () throws IOError {
+        return transmission_bus.get_server_version ();
+    }
+
+    /**
+     * Returns the display name of the connected server.
+     *
+     * @return The name of the server.
+     */
+    public string get_server_name () throws IOError {
+        return transmission_bus.get_server_name ();
+    }
+
     private void connect_dbus () {
         try {
             transmission_bus = Bus.get_proxy_sync (BusType.SESSION, "org.dropd.OutgoingTransmission", interface_path);

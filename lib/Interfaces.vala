@@ -195,5 +195,7 @@ namespace Drop {
         public abstract void cancel () throws IOError;
         public abstract bool get_is_secure () throws IOError;
         public abstract ClientState get_state () throws IOError;
+        public abstract uint8 get_server_version () throws IOError;
+        public abstract string get_server_name () throws IOError;
     }
 }
