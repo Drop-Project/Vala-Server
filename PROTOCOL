@@ -15,6 +15,10 @@ VERSION 1
     [1 Byte] Client Version
     [STRING] Client Name
 
+<= Initialisation
+    [1 Byte] Server Version
+    [STRING] Server Name
+
 One time per file {
     => File Request
         [1 BYTE] Last File ( 0 / 1 )

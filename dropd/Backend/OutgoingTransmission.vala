@@ -24,6 +24,7 @@ public class DropDaemon.Backend.OutgoingTransmission : ProtocolImplementation {
     public enum ClientState {
         LOADING_FILES,
         SENDING_INITIALISATION,
+        AWAITING_INITIALISATION,
         SENDING_REQUEST,
         AWAITING_CONFIRMATION,
         REJECTED,
@@ -46,9 +47,11 @@ public class DropDaemon.Backend.OutgoingTransmission : ProtocolImplementation {
     public signal void progress_changed (uint64 bytes_sent, uint64 total_size);
     public signal void file_sent (uint id);
 
-    private bool is_secure = false;
+    private bool is_secure;
     private ClientState state = ClientState.LOADING_FILES;
 
+    private uint8 server_version;
+    private string server_name;
     private Gee.HashMap<uint16, FileRequest? > file_requests;
 
     public OutgoingTransmission (SocketConnection connection, string client_name, string[] files, bool is_secure) {
@@ -68,6 +71,15 @@ public class DropDaemon.Backend.OutgoingTransmission : ProtocolImplementation {
 
             if (!send_initialisation (client_name)) {
                 protocol_failed (_("Sending initialisation failed."));
+                update_state (ClientState.FAILURE);
+
+                return 0;
+            }
+
+            update_state (ClientState.AWAITING_INITIALISATION);
+
+            if (!receive_initialisation ()) {
+                protocol_failed (_("Receiving initialisation failed."));
                 update_state (ClientState.FAILURE);
 
                 return 0;
@@ -120,6 +132,14 @@ public class DropDaemon.Backend.OutgoingTransmission : ProtocolImplementation {
 
     public ClientState get_state () {
         return state;
+    }
+
+    public uint8 get_server_version () {
+        return server_version;
+    }
+
+    public string get_server_name () {
+        return server_name;
     }
 
     public FileRequest[] get_file_requests () {
@@ -180,6 +200,22 @@ public class DropDaemon.Backend.OutgoingTransmission : ProtocolImplementation {
         }
 
         return send_package (package);
+    }
+
+    private bool receive_initialisation () {
+        uint8[]? package = receive_package (2);
+
+        if (package == null) {
+            return false;
+        }
+
+        server_version = package[0];
+
+        package.move (1, 0, package.length);
+
+        server_name = (string)package;
+
+        return true;
     }
 
     private bool send_request () {

@@ -127,6 +127,7 @@ namespace Drop {
      */
     public enum ServerState {
         AWAITING_INITIALISATION,
+        SENDING_INITIALISATION,
         AWAITING_REQUEST,
         NEEDS_CONFIRMATION,
         SENDING_CONFIRMATION,
@@ -143,6 +144,7 @@ namespace Drop {
     public enum ClientState {
         LOADING_FILES,
         SENDING_INITIALISATION,
+        AWAITING_INITIALISATION,
         SENDING_REQUEST,
         AWAITING_CONFIRMATION,
         REJECTED,
@@ -193,5 +195,7 @@ namespace Drop {
         public abstract void cancel () throws IOError;
         public abstract bool get_is_secure () throws IOError;
         public abstract ClientState get_state () throws IOError;
+        public abstract uint8 get_server_version () throws IOError;
+        public abstract string get_server_name () throws IOError;
     }
 }

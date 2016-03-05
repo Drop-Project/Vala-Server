@@ -23,6 +23,7 @@
 public class DropDaemon.Backend.IncomingTransmission : ProtocolImplementation {
     public enum ServerState {
         AWAITING_INITIALISATION,
+        SENDING_INITIALISATION,
         AWAITING_REQUEST,
         NEEDS_CONFIRMATION,
         SENDING_CONFIRMATION,
@@ -52,7 +53,7 @@ public class DropDaemon.Backend.IncomingTransmission : ProtocolImplementation {
     private string client_name;
     private Gee.HashMap<uint16, FileRequest? > file_requests;
 
-    public IncomingTransmission (IOStream connection, bool is_secure) {
+    public IncomingTransmission (IOStream connection, string server_name, bool is_secure) {
         base (connection.input_stream, connection.output_stream);
 
         this.is_secure = is_secure;
@@ -60,6 +61,15 @@ public class DropDaemon.Backend.IncomingTransmission : ProtocolImplementation {
         new Thread<int> (null, () => {
             if (!receive_initialisation ()) {
                 protocol_failed (_("Receiving initialisation failed."));
+                update_state (ServerState.FAILURE);
+
+                return 0;
+            }
+
+            update_state (ServerState.SENDING_INITIALISATION);
+
+            if (!send_initialisation (server_name)) {
+                protocol_failed (_("Sending initialisation failed."));
                 update_state (ServerState.FAILURE);
 
                 return 0;
@@ -185,6 +195,17 @@ public class DropDaemon.Backend.IncomingTransmission : ProtocolImplementation {
         client_name = (string)package;
 
         return true;
+    }
+
+    private bool send_initialisation (string server_name) {
+        uint8[] package = {};
+        package += (uint8)Application.PROTOCOL_VERSION;
+
+        for (int i = 0; i < server_name.data.length; i++) {
+            package += server_name.data[i];
+        }
+
+        return send_package (package);
     }
 
     private bool receive_request () {
