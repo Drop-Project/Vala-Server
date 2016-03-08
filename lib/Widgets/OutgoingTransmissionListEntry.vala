@@ -1,4 +1,4 @@
-/*
+g/*
  * Copyright (c) 2015-2016 Drop Developers
  *
  * This program is free software; you can redistribute it and/or
@@ -54,7 +54,6 @@ public class Drop.Widgets.OutgoingTransmissionListEntry : TransmissionListEntry 
         stop_button.valign = Gtk.Align.CENTER;
 
         action_area.add (cancel_button);
-        action_area.show_all ();
     }
 
     private void read_state () {
@@ -70,7 +69,6 @@ public class Drop.Widgets.OutgoingTransmissionListEntry : TransmissionListEntry 
         transmission.progress_changed.connect (display_progress);
 
         cancel_button.clicked.connect (cancel);
-
         stop_button.clicked.connect (cancel);
     }
 
@@ -120,6 +118,14 @@ public class Drop.Widgets.OutgoingTransmissionListEntry : TransmissionListEntry 
     }
 
     private void display_sending_initialisation () {
+        set_secondary_label (_("Sending initialisation…"));
+    }
+
+    private void display_sending_request () {
+        set_secondary_label (_("Sending request…"));
+    }
+
+    private void display_awaiting_confirmation () {
         try {
             var files = transmission.get_file_requests ();
 
@@ -132,25 +138,17 @@ public class Drop.Widgets.OutgoingTransmissionListEntry : TransmissionListEntry 
             }
 
             if (files.length == 1) {
-                set_primary_label (_("Sending %s to %s").printf (files[0].name, "Felipe Escoto"));
+                set_primary_label (_("Sending %s to %s").printf (files[0].name, transmission.get_server_name ()));
                 set_icon_for_file_name (files[0].name);
             } else {
-                set_primary_label (_("Sending %d files to %s").printf (files.length, "Felipe Escoto"));
+                set_primary_label (_("Sending %d files to %s").printf (files.length, transmission.get_server_name()));
                 set_icon_from_icon_name ("network-workgroup");
             }
 
-            set_secondary_label (_("Sending initialisation…"));
+            set_secondary_label (_("Awaiting confirmation…"));
         } catch (Error e) {
             warning ("Reading file request failed: %s", e.message);
         }
-    }
-
-    private void display_sending_request () {
-        set_secondary_label (_("Sending request…"));
-    }
-
-    private void display_awaiting_confirmation () {
-        set_secondary_label (_("Awaiting confirmation…"));
     }
 
     private void display_rejected () {
@@ -184,6 +182,7 @@ public class Drop.Widgets.OutgoingTransmissionListEntry : TransmissionListEntry 
     private void swap_buttons () {
         action_area.remove (cancel_button);
         action_area.add (stop_button);
+
         action_area.show_all ();
     }
 

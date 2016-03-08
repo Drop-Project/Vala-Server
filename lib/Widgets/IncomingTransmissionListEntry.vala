@@ -85,7 +85,7 @@ public class Drop.Widgets.IncomingTransmissionListEntry : TransmissionListEntry 
                 transmission.accept_transmission (ids);
                 accept_button.set_visible (false);
             } catch (Error e) {
-                stderr.printf ("Could not accept transmition: %s", e.message);
+                warning ("Could not accept transmition: %s", e.message);
             }
         });
 
@@ -94,7 +94,7 @@ public class Drop.Widgets.IncomingTransmissionListEntry : TransmissionListEntry 
                 transmission.reject_transmission ();
                 this.destroy ();
             } catch (Error e) {
-                stderr.printf ("Could not reject transmition: %s", e.message);
+                warning ("Could not reject transmition: %s", e.message);
             }
         });
 
@@ -103,7 +103,7 @@ public class Drop.Widgets.IncomingTransmissionListEntry : TransmissionListEntry 
                 transmission.cancel ();
                 this.destroy ();
             } catch (Error e) {
-                stderr.printf ("Could not cancel transmition: %s", e.message);
+                warning ("Could not cancel transmition: %s", e.message);
             }
         });
     }
@@ -180,7 +180,7 @@ public class Drop.Widgets.IncomingTransmissionListEntry : TransmissionListEntry 
         try {
             set_primary_label (_("Downloading %s from  %s").printf (file_string, transmission.get_client_name ()));
         } catch (Error e) {
-             warning ("Reading client name failed: %s", e.message);
+            warning ("Reading client name failed: %s", e.message);
         }
 
         set_secondary_label (_("Receiving files…"));
@@ -209,10 +209,16 @@ public class Drop.Widgets.IncomingTransmissionListEntry : TransmissionListEntry 
         action_area.remove (accept_button);
         action_area.remove (reject_button);
         action_area.add (cancel_button);
+
+        action_area.show_all ();
     }
 
     private void display_single_file (IncomingFileRequest file) {
-        set_primary_label (_("Incoming file from %s").printf(transmission.get_client_name ()));
+        try {
+            set_primary_label (_("Incoming file from %s").printf(transmission.get_client_name ()));
+        } catch (Error e) {
+            warning ("Reading client name failed: %s", e.message);
+        }
 
         file_string = file.name;
 
@@ -229,7 +235,11 @@ public class Drop.Widgets.IncomingTransmissionListEntry : TransmissionListEntry 
     }
 
     private void display_multi_files (IncomingFileRequest[] files) {
-        set_primary_label (_("Incoming files from %s").printf (transmission.get_client_name ()));
+        try {
+            set_primary_label (_("Incoming files from %s").printf (transmission.get_client_name ()));
+        } catch (Error e) {
+            warning ("Reading client name failed: %s", e.message);
+        }
 
         file_string = "%d files".printf (files.length);
 
