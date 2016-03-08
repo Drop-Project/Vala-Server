@@ -76,10 +76,10 @@ public class Drop.Widgets.TransmissionListEntry : Gtk.Box {
 
         progress_revealer.add (progress_bar);
 
-        action_area = new Gtk.Box (Gtk.Orientation.VERTICAL, 4);
+        action_area = new Gtk.Box (Gtk.Orientation.VERTICAL, 3);
         action_area.valign = Gtk.Align.CENTER;
 
-        main_grid.attach (icon, 0, 0, 1, 4);
+        main_grid.attach (icon, 0, 0, 1, 3);
         main_grid.attach (primary_label, 1, 1, 1, 1);
         main_grid.attach (progress_revealer, 1, 2, 1, 1);
         main_grid.attach (secondary_label, 1, 3, 1, 1);
