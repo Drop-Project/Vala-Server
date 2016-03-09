@@ -45,8 +45,8 @@ public abstract class DropDaemon.Backend.ProtocolImplementation : Object {
                 return false;
             }
 
-            output_stream.write ({ (uint8)((package_length >> 8) & 0xff), (uint8)(package_length & 0xff) }, cancellable);
-            output_stream.write (data, cancellable);
+            output_stream.write_all ({ (uint8)((package_length >> 8) & 0xff), (uint8)(package_length & 0xff) }, null, cancellable);
+            output_stream.write_all (data, null, cancellable);
 
             return true;
         } catch (Error e) {
