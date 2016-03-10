@@ -105,8 +105,9 @@ public class Drop.Widgets.OutgoingTransmissionList : Gtk.Box {
         transmission_count++;
 
         transmission.state_changed.connect ((state) => {
-            if (state == ClientState.SENDING_REQUEST)
+            if (state == ClientState.SENDING_REQUEST) {
                 transmission_added (transmission);
+            }
         });
     }
 }
