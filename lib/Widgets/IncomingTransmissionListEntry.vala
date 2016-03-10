@@ -215,7 +215,7 @@ public class Drop.Widgets.IncomingTransmissionListEntry : TransmissionListEntry 
 
     private void display_single_file (IncomingFileRequest file) {
         try {
-            set_primary_label (_("Incoming file from %s").printf(transmission.get_client_name ()));
+            set_primary_label (_("Incoming file from %s").printf (transmission.get_client_name ()));
         } catch (Error e) {
             warning ("Reading client name failed: %s", e.message);
         }
@@ -225,7 +225,7 @@ public class Drop.Widgets.IncomingTransmissionListEntry : TransmissionListEntry 
         string info_text = "";
 
         try {
-            info_text = _("%s (%s)".printf(file.name, format_size (file.size)));
+            info_text = _("%s (%s)".printf (file.name, format_size (file.size)));
         } catch (Error e) {
             warning ("Reading client name failed: %s", e.message);
         }
