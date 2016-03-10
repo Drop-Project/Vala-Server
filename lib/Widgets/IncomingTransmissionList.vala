@@ -106,8 +106,9 @@ public class Drop.Widgets.IncomingTransmissionList : Gtk.Box {
         transmission_count++;
 
         transmission.state_changed.connect ((state) => {
-            if (state == ServerState.AWAITING_REQUEST)
+            if (state == ServerState.AWAITING_REQUEST) {
                 transmission_added (transmission);
+            }
         });
     }
 }
