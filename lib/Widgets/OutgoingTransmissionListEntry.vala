@@ -141,7 +141,7 @@ public class Drop.Widgets.OutgoingTransmissionListEntry : TransmissionListEntry 
                 set_primary_label (_("Sending %s to %s").printf (files[0].name, transmission.get_server_name ()));
                 set_icon_for_file_name (files[0].name);
             } else {
-                set_primary_label (_("Sending %d files to %s").printf (files.length, transmission.get_server_name()));
+                set_primary_label (_("Sending %d files to %s").printf (files.length, transmission.get_server_name ()));
                 set_icon_from_icon_name ("network-workgroup");
             }
 
