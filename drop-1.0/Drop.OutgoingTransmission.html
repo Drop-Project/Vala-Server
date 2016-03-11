@@ -32,6 +32,8 @@
           <li class="method"><a href="Drop.OutgoingTransmission.cancel.html">cancel</a></li>
           <li class="method"><a href="Drop.OutgoingTransmission.get_file_requests.html">get_file_requests</a></li>
           <li class="method"><a href="Drop.OutgoingTransmission.get_is_secure.html">get_is_secure</a></li>
+          <li class="method"><a href="Drop.OutgoingTransmission.get_server_name.html">get_server_name</a></li>
+          <li class="method"><a href="Drop.OutgoingTransmission.get_server_version.html">get_server_version</a></li>
           <li class="method"><a href="Drop.OutgoingTransmission.get_state.html">get_state</a></li>
           <li class="signal"><a href="Drop.OutgoingTransmission.file_sent.html">file_sent</a></li>
           <li class="signal"><a href="Drop.OutgoingTransmission.progress_changed.html">progress_changed</a></li>
@@ -94,6 +96,14 @@
           <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="Drop.ClientState.html" class="enum">ClientState</a></span> <b><a href="Drop.OutgoingTransmission.get_state.html" class="method">get_state</a></b> () <span class="main_keyword">throws</span> <span class="main_type"><span class="errordomain">IOError</span></span>
             </span>
             <div class="leaf_brief_description"><span class="brief_description">Returns the current protocol state.</span>
+            </div></li>
+          <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">uint8</span></span> <b><a href="Drop.OutgoingTransmission.get_server_version.html" class="method">get_server_version</a></b> () <span class="main_keyword">throws</span> <span class="main_type"><span class="errordomain">IOError</span></span>
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Returns the used protocol version of the connected server.</span>
+            </div></li>
+          <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="class">string</span></span> <b><a href="Drop.OutgoingTransmission.get_server_name.html" class="method">get_server_name</a></b> () <span class="main_keyword">throws</span> <span class="main_type"><span class="errordomain">IOError</span></span>
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Returns the display name of the connected server.</span>
             </div></li>
         </ul>
         <h3 class="main_title">Signals:</h3>
