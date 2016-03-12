@@ -34,6 +34,8 @@ public class Drop.Widgets.IncomingTransmissionListEntry : TransmissionListEntry 
 
     private Gtk.Button cancel_button;
 
+    private string file_string;
+
     /**
      * Creates a new incoming transmission entry.
      *
@@ -48,15 +50,14 @@ public class Drop.Widgets.IncomingTransmissionListEntry : TransmissionListEntry 
     }
 
     private void build_ui () {
-        action_area.get_style_context ().add_class (Gtk.STYLE_CLASS_LINKED);
-
-        accept_button = new Gtk.Button.from_icon_name ("object-select-symbolic", Gtk.IconSize.BUTTON);
+        accept_button = new Gtk.Button.with_label (_("Accept"));
         accept_button.valign = Gtk.Align.CENTER;
+        accept_button.get_style_context ().add_class ("suggested-action");
 
-        reject_button = new Gtk.Button.from_icon_name ("process-stop-symbolic", Gtk.IconSize.BUTTON);
+        reject_button = new Gtk.Button.with_label (_("Reject"));
         reject_button.valign = Gtk.Align.CENTER;
 
-        cancel_button = new Gtk.Button.from_icon_name ("process-stop-symbolic", Gtk.IconSize.BUTTON);
+        cancel_button = new Gtk.Button.from_icon_name ("process-stop-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
         cancel_button.valign = Gtk.Align.CENTER;
     }
 
@@ -84,7 +85,7 @@ public class Drop.Widgets.IncomingTransmissionListEntry : TransmissionListEntry 
                 transmission.accept_transmission (ids);
                 accept_button.set_visible (false);
             } catch (Error e) {
-                stderr.printf ("Could not accept transmition: %s", e.message);
+                warning ("Could not accept transmition: %s", e.message);
             }
         });
 
@@ -93,7 +94,7 @@ public class Drop.Widgets.IncomingTransmissionListEntry : TransmissionListEntry 
                 transmission.reject_transmission ();
                 this.destroy ();
             } catch (Error e) {
-                stderr.printf ("Could not reject transmition: %s", e.message);
+                warning ("Could not reject transmition: %s", e.message);
             }
         });
 
@@ -102,7 +103,7 @@ public class Drop.Widgets.IncomingTransmissionListEntry : TransmissionListEntry 
                 transmission.cancel ();
                 this.destroy ();
             } catch (Error e) {
-                stderr.printf ("Could not cancel transmition: %s", e.message);
+                warning ("Could not cancel transmition: %s", e.message);
             }
         });
     }
@@ -162,8 +163,8 @@ public class Drop.Widgets.IncomingTransmissionListEntry : TransmissionListEntry 
                 display_multi_files (files);
             }
 
-            action_area.add (accept_button);
             action_area.add (reject_button);
+            action_area.add (accept_button);
             action_area.show_all ();
         } catch (Error e) {
             warning ("Reading file request failed: %s", e.message);
@@ -172,15 +173,20 @@ public class Drop.Widgets.IncomingTransmissionListEntry : TransmissionListEntry 
 
     private void display_rejected () {
         set_secondary_label (_("Transmission rejected"));
+        swap_buttons ();
     }
 
     private void display_receiving_data () {
+        try {
+            set_primary_label (_("Downloading %s from  %s").printf (file_string, transmission.get_client_name ()));
+        } catch (Error e) {
+            warning ("Reading client name failed: %s", e.message);
+        }
+
         set_secondary_label (_("Receiving files…"));
         set_progress_visible (true);
 
-        action_area.remove (accept_button);
-        action_area.remove (reject_button);
-        action_area.add (cancel_button);
+        swap_buttons ();
         action_area.show_all ();
     }
 
@@ -199,13 +205,27 @@ public class Drop.Widgets.IncomingTransmissionListEntry : TransmissionListEntry 
         set_progress_visible (false);
     }
 
-    private void display_single_file (IncomingFileRequest file) {
-        set_primary_label (file.name);
+    private void swap_buttons () {
+        action_area.remove (accept_button);
+        action_area.remove (reject_button);
+        action_area.add (cancel_button);
 
-        string info_text = format_size (file.size);
+        action_area.show_all ();
+    }
+
+    private void display_single_file (IncomingFileRequest file) {
+        try {
+            set_primary_label (_("Incoming file from %s").printf (transmission.get_client_name ()));
+        } catch (Error e) {
+            warning ("Reading client name failed: %s", e.message);
+        }
+
+        file_string = file.name;
+
+        string info_text = "";
 
         try {
-            info_text += _(" - From: %s").printf (transmission.get_client_name ());
+            info_text = _("%s (%s)".printf (file.name, format_size (file.size)));
         } catch (Error e) {
             warning ("Reading client name failed: %s", e.message);
         }
@@ -215,18 +235,23 @@ public class Drop.Widgets.IncomingTransmissionListEntry : TransmissionListEntry 
     }
 
     private void display_multi_files (IncomingFileRequest[] files) {
-        set_primary_label ("%d files".printf (files.length));
+        try {
+            set_primary_label (_("Incoming files from %s").printf (transmission.get_client_name ()));
+        } catch (Error e) {
+            warning ("Reading client name failed: %s", e.message);
+        }
 
+        file_string = "%d files".printf (files.length);
+
+        string info_text = "";
         uint64 total_size = 0;
 
         foreach (var file in files) {
             total_size += file.size;
         }
 
-        string info_text = format_size (total_size);
-
         try {
-            info_text += _(" - From: %s").printf (transmission.get_client_name ());
+            info_text = _("%d files (%s)").printf (files.length, format_size (total_size));
         } catch (Error e) {
             warning ("Reading client name failed: %s", e.message);
         }
